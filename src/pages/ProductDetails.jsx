@@ -3,8 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getProductById, incrementProductClicks } from "../services/productService";
 import {
     MessageCircle, Phone, Tag, Truck, ChevronLeft, ChevronRight,
-    ArrowLeft, Package, Layers, Sparkles, CheckCircle2, Info,
-    ZoomIn,
+    ArrowLeft, Package, ZoomIn, ShieldCheck
 } from "lucide-react";
 
 // ─── Image Lightbox ───────────────────────────────────────────────────────────
@@ -17,29 +16,10 @@ function Lightbox({ src, alt, onClose }) {
 
     return (
         <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4" onClick={onClose}>
-            <img src={src} alt={alt} className="max-w-full max-h-full object-contain rounded-xl shadow-2xl" onClick={e => e.stopPropagation()} />
-            <button onClick={onClose} className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full transition-colors">
+            <img src={src} alt={alt} className="max-w-full max-h-full object-contain rounded-sm shadow-2xl" onClick={e => e.stopPropagation()} />
+            <button onClick={onClose} className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-sm transition-colors">
                 ✕
             </button>
-        </div>
-    );
-}
-
-// ─── Section Card ─────────────────────────────────────────────────────────────
-function SectionCard({ icon: Icon, title, children, accent = "violet" }) {
-    const colors = {
-        violet: "bg-violet-50 border-violet-100 text-violet-600",
-        emerald: "bg-emerald-50 border-emerald-100 text-emerald-600",
-        blue: "bg-blue-50 border-blue-100 text-blue-600",
-        amber: "bg-amber-50 border-amber-100 text-amber-600",
-    };
-    return (
-        <div className={`rounded-2xl border p-5 ${colors[accent]}`}>
-            <div className="flex items-center gap-2 mb-4">
-                <Icon size={16} className="flex-shrink-0" />
-                <h3 className="font-bold text-sm uppercase tracking-wider">{title}</h3>
-            </div>
-            <div className="text-slate-700">{children}</div>
         </div>
     );
 }
@@ -50,6 +30,10 @@ export default function ProductDetails() {
     const [loading, setLoading] = useState(true);
     const [activeImg, setActiveImg] = useState(0);
     const [lightbox, setLightbox] = useState(null);
+
+    // Font inline styles for the theme
+    const headingStyle = { fontFamily: "'Poppins', sans-serif" };
+    const bodyStyle = { fontFamily: "'Open Sans', sans-serif" };
 
     useEffect(() => {
         incrementProductClicks(id);
@@ -63,27 +47,27 @@ export default function ProductDetails() {
 
     // ── Loading skeleton ──────────────────────────────────────────────────────
     if (loading) return (
-        <div className="max-w-5xl mx-auto px-4 py-12 animate-pulse">
-            <div className="h-5 bg-slate-200 rounded w-24 mb-8" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div className="aspect-square bg-slate-200 rounded-3xl" />
-                <div className="space-y-4">
-                    <div className="h-5 bg-slate-100 rounded w-20" />
-                    <div className="h-9 bg-slate-200 rounded w-3/4" />
-                    <div className="h-8 bg-slate-200 rounded w-1/3" />
-                    <div className="h-4 bg-slate-100 rounded" />
-                    <div className="h-4 bg-slate-100 rounded w-4/5" />
-                    <div className="h-4 bg-slate-100 rounded w-2/3" />
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 py-6 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded-sm w-32 mb-6" />
+            <div className="flex flex-col lg:flex-row gap-8">
+                <div className="w-full lg:w-5/12 aspect-[4/5] bg-gray-200 rounded-sm" />
+                <div className="w-full lg:w-7/12 space-y-4 pt-2">
+                    <div className="h-8 bg-gray-200 rounded-sm w-3/4" />
+                    <div className="h-4 bg-gray-100 rounded-sm w-1/4 mb-6" />
+                    <div className="h-10 bg-gray-200 rounded-sm w-1/3 mb-6" />
+                    <div className="h-4 bg-gray-100 rounded-sm w-full" />
+                    <div className="h-4 bg-gray-100 rounded-sm w-5/6" />
+                    <div className="h-4 bg-gray-100 rounded-sm w-4/6" />
                 </div>
             </div>
         </div>
     );
 
     if (!product) return (
-        <div className="text-center py-24 text-slate-400">
-            <Package size={48} strokeWidth={1} className="mx-auto mb-4 text-slate-200" />
-            <p className="text-xl font-semibold text-slate-600">Product not found.</p>
-            <Link to="/" className="text-violet-600 mt-4 inline-block hover:underline text-sm">← Back to shop</Link>
+        <div className="text-center py-24 text-gray-400" style={bodyStyle}>
+            <Package size={48} strokeWidth={1} className="mx-auto mb-4 text-gray-300" />
+            <p className="text-xl font-semibold text-[#111111]" style={headingStyle}>Product not found.</p>
+            <Link to="/" className="text-[#2563EB] mt-4 inline-block hover:underline text-sm font-medium">← Back to shop</Link>
         </div>
     );
 
@@ -93,17 +77,15 @@ export default function ProductDetails() {
         whatsappNumber, callNumber, coverImage,
     } = product;
 
-    // Gallery: if coverImage exists add it as first, then rest of images (deduped)
     const galleryImgs = (() => {
         const base = images?.length ? images : [];
         if (coverImage) {
             const rest = base.filter(u => u !== coverImage);
             return [coverImage, ...rest];
         }
-        return base.length ? base : ["https://placehold.co/600x500?text=No+Image"];
+        return base.length ? base : ["https://placehold.co/600x600?text=No+Image"];
     })();
 
-    // description can be array (bullet points) or plain string
     const descArray = Array.isArray(description)
         ? description.filter(Boolean)
         : typeof description === "string" && description
@@ -112,78 +94,71 @@ export default function ProductDetails() {
 
     const specsArray = Array.isArray(specs) ? specs.filter(s => s.key && s.value) : [];
 
-    // Per-product contact numbers
-    const waNumber   = whatsappNumber || "";
-    const phoneNumber = callNumber    || "";
-
+    const waNumber = whatsappNumber || "";
+    const phoneNumber = callNumber || "";
     const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi! I'm interested in buying "${productName}". Could you please provide more details?`)}`;
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 py-6 text-[#111111]" style={bodyStyle}>
 
-            {/* Lightbox */}
             {lightbox && <Lightbox src={lightbox} alt={productName} onClose={() => setLightbox(null)} />}
 
-            {/* Back link */}
-            <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-violet-600 mb-8 transition-colors font-medium group">
-                <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" /> Back to shop
-            </Link>
+            {/* Breadcrumb / Back */}
+            <div className="mb-4">
+                <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#2563EB] transition-colors font-medium">
+                    <ArrowLeft size={14} /> Back to results
+                </Link>
+            </div>
 
-            {/* ── Main Grid ── */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+            {/* ── Main Layout Split ── */}
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
                 {/* ── LEFT: Image Gallery ── */}
-                <div>
-                    {/* Main image */}
-                    <div className="relative rounded-3xl overflow-hidden bg-slate-100 aspect-square shadow-lg group">
+                <div className="w-full lg:w-5/12 flex flex-col lg:flex-row gap-4 sticky top-24">
+                    
+                    {/* Main Image */}
+                    <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/5] bg-white border border-gray-200 rounded-sm flex items-center justify-center group cursor-zoom-in order-1 lg:order-none">
                         <img
                             src={galleryImgs[activeImg]}
                             alt={productName}
-                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+                            onClick={() => setLightbox(galleryImgs[activeImg])}
+                            className="w-full h-full object-contain p-2"
                         />
-                        {/* Zoom button */}
                         <button
                             onClick={() => setLightbox(galleryImgs[activeImg])}
-                            className="absolute top-3 right-3 bg-white/80 hover:bg-white p-2 rounded-xl shadow-md text-slate-600 hover:text-violet-600 transition-all opacity-0 group-hover:opacity-100"
-                            title="View full size"
+                            className="absolute top-3 right-3 bg-white border border-gray-200 p-2 rounded-sm shadow-sm text-gray-500 hover:text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                            <ZoomIn size={16} />
+                            <ZoomIn size={18} />
                         </button>
-
-                        {/* Prev / Next arrows */}
+                        
                         {galleryImgs.length > 1 && (
                             <>
                                 <button
-                                    onClick={() => setActiveImg(p => (p - 1 + galleryImgs.length) % galleryImgs.length)}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-xl shadow-md transition-all"
+                                    onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p - 1 + galleryImgs.length) % galleryImgs.length); }}
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 p-2 rounded-sm shadow-sm hover:text-[#2563EB] lg:opacity-0 group-hover:opacity-100 transition-all"
                                 >
-                                    <ChevronLeft size={18} />
+                                    <ChevronLeft size={20} />
                                 </button>
                                 <button
-                                    onClick={() => setActiveImg(p => (p + 1) % galleryImgs.length)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-xl shadow-md transition-all"
+                                    onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p + 1) % galleryImgs.length); }}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 p-2 rounded-sm shadow-sm hover:text-[#2563EB] lg:opacity-0 group-hover:opacity-100 transition-all"
                                 >
-                                    <ChevronRight size={18} />
+                                    <ChevronRight size={20} />
                                 </button>
                             </>
                         )}
-
-                        {/* Image counter badge */}
-                        {galleryImgs.length > 1 && (
-                            <span className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">
-                                {activeImg + 1} / {galleryImgs.length}
-                            </span>
-                        )}
                     </div>
 
-                    {/* Thumbnails */}
+                    {/* Thumbnails (Right Side on LG, Bottom on Mobile/Tablet) */}
                     {galleryImgs.length > 1 && (
-                        <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+                        <div className="flex lg:flex-col gap-2 overflow-auto hide-scrollbar shrink-0 order-2 lg:order-none">
                             {galleryImgs.map((src, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setActiveImg(i)}
-                                    className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${activeImg === i ? "border-violet-500 shadow-md shadow-violet-100" : "border-transparent opacity-60 hover:opacity-100"}`}
+                                    className={`w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-sm overflow-hidden border-2 transition-all ${
+                                        activeImg === i ? "border-[#2563EB]" : "border-transparent opacity-70 hover:opacity-100 hover:border-gray-300"
+                                    }`}
                                 >
                                     <img src={src} alt="" className="w-full h-full object-cover" />
                                 </button>
@@ -192,41 +167,41 @@ export default function ProductDetails() {
                     )}
                 </div>
 
-                {/* ── RIGHT: Core Info ── */}
-                <div className="flex flex-col">
-                    {/* Category badge */}
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-violet-600 bg-violet-50 border border-violet-100 px-3 py-1.5 rounded-full w-fit mb-4">
-                        <Tag size={11} /> {category}
+                {/* ── CENTER: Product Details ── */}
+                <div className="w-full lg:w-4/12 flex-1 flex flex-col border-b lg:border-b-0 pb-8 lg:pb-0">
+                    <span className="text-[#2563EB] font-semibold text-sm tracking-wide mb-1" style={headingStyle}>
+                        {category}
                     </span>
-
-                    {/* Product name */}
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 leading-tight mb-3">
+                    <h1 className="text-2xl md:text-3xl font-bold text-[#111111] leading-tight mb-2" style={headingStyle}>
                         {productName}
                     </h1>
 
-                    {/* Price */}
-                    <div className="flex items-baseline gap-2 mb-6">
-                        <span className="text-4xl font-black text-violet-600">RM {Number(price).toFixed(2)}</span>
+                    <hr className="my-4 border-gray-200" />
+
+                    {/* Price Tag */}
+                    <div className="mb-4">
+                        <span className="text-sm text-gray-500 font-medium">Price</span>
+                        <div className="flex items-start text-[#111111]">
+                            <span className="text-lg font-semibold mt-1 mr-0.5">₹</span>
+                            <span className="text-4xl font-bold" style={headingStyle}>{Number(price).toFixed(2)}</span>
+                        </div>
+                        <span className="text-xs text-gray-500">Inclusive of all taxes</span>
                     </div>
 
-                    {/* Material pill */}
                     {material && (
-                        <div className="flex items-center gap-2 mb-5">
-                            <div className="flex items-center gap-2 bg-slate-100 rounded-xl px-4 py-2 text-sm text-slate-600 font-medium">
-                                <Layers size={14} className="text-slate-400" />
-                                <span>Material: <strong className="text-slate-800">{material}</strong></span>
-                            </div>
+                        <div className="mb-4 text-sm">
+                            <span className="font-semibold text-gray-900">Material:</span> <span className="text-gray-600">{material}</span>
                         </div>
                     )}
 
-                    {/* Description bullets */}
+                    {/* About this item (Bullets) */}
                     {descArray.length > 0 && (
-                        <div className="mb-6">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Product Details</h3>
-                            <ul className="space-y-2">
+                        <div className="mt-2 mb-6">
+                            <h3 className="text-base font-bold text-[#111111] mb-2" style={headingStyle}>About this item</h3>
+                            <ul className="space-y-2 pl-1">
                                 {descArray.map((point, i) => (
-                                    <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
-                                        <CheckCircle2 size={15} className="text-violet-400 mt-0.5 flex-shrink-0" />
+                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 shrink-0"></div>
                                         <span>{point}</span>
                                     </li>
                                 ))}
@@ -234,71 +209,70 @@ export default function ProductDetails() {
                         </div>
                     )}
 
-                    {/* Delivery */}
-                    {deliveryDetails && (
-                        <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-100 rounded-2xl p-4 mb-6 text-sm text-slate-600">
-                            <Truck size={17} className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                            <div>
-                                <span className="font-bold text-emerald-700 block mb-0.5">Delivery Info</span>
-                                {deliveryDetails}
+                    {/* Specs Table integrated into details flow */}
+                    {specsArray.length > 0 && (
+                        <div className="mt-4">
+                            <h3 className="text-base font-bold text-[#111111] mb-3" style={headingStyle}>Specifications</h3>
+                            <div className="border border-gray-200 rounded-sm overflow-hidden text-sm">
+                                {specsArray.map((spec, i) => (
+                                    <div key={i} className={`flex px-4 py-2.5 ${i % 2 === 0 ? "bg-gray-50" : "bg-white"} border-b border-gray-100 last:border-0`}>
+                                        <span className="w-1/3 font-semibold text-[#111111]">{spec.key}</span>
+                                        <span className="w-2/3 text-gray-600">{spec.value}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
-
-                    {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                        <a
-                            href={waLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-green-100 text-sm"
-                        >
-                            <MessageCircle size={19} /> WhatsApp Now
-                        </a>
-                        <a
-                            href={`tel:+${phoneNumber}`}
-                            className="flex-1 flex items-center justify-center gap-2.5 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-violet-100 text-sm"
-                        >
-                            <Phone size={19} /> Call Now
-                        </a>
-                    </div>
                 </div>
-            </div>
 
-            {/* ── SPECS TABLE (full width below) ── */}
-            {specsArray.length > 0 && (
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden mb-6">
-                    <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-50 bg-slate-50/80">
-                        <Sparkles size={16} className="text-violet-500" />
-                        <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider">Features & Specifications</h3>
-                    </div>
-                    <div className="divide-y divide-slate-50">
-                        {specsArray.map((spec, i) => (
-                            <div key={i} className={`flex items-center px-6 py-3.5 text-sm ${i % 2 === 0 ? "bg-white" : "bg-slate-50/40"}`}>
-                                <span className="w-2/5 font-semibold text-slate-500 capitalize">{spec.key}</span>
-                                <span className="flex-1 text-slate-800 font-medium">{spec.value}</span>
+                {/* ── RIGHT: Buy Box (CTAs) ── */}
+                <div className="w-full lg:w-3/12 shrink-0">
+                    <div className="border border-gray-200 rounded-sm p-5 bg-white shadow-sm sticky top-24">
+                        <div className="flex items-center gap-2 text-[#111111] font-bold text-xl mb-4" style={headingStyle}>
+                            <span className="text-sm font-semibold">₹</span>{Number(price).toFixed(2)}
+                        </div>
+                        
+                        <div className="text-sm text-gray-600 mb-6 space-y-3">
+                            {deliveryDetails ? (
+                                <div className="flex items-start gap-2">
+                                    <Truck size={18} className="text-gray-400 shrink-0 mt-0.5" />
+                                    <span>{deliveryDetails}</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-start gap-2">
+                                    <Truck size={18} className="text-gray-400 shrink-0 mt-0.5" />
+                                    <span>Standard delivery available</span>
+                                </div>
+                            )}
+                            <div className="flex items-start gap-2">
+                                <ShieldCheck size={18} className="text-gray-400 shrink-0 mt-0.5" />
+                                <span>Secure transaction via WhatsApp</span>
                             </div>
-                        ))}
+                        </div>
+
+                        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Place Order</h4>
+                        
+                        <div className="flex flex-col gap-3">
+                            <a
+                                href={waLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full flex items-center justify-center gap-2 bg-[#2563EB] hover:bg-blue-700 text-white font-medium py-2.5 rounded-sm transition-colors text-sm"
+                                style={headingStyle}
+                            >
+                                <MessageCircle size={16} /> Order via WhatsApp
+                            </a>
+                            <a
+                                href={`tel:+${phoneNumber}`}
+                                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-[#111111] border border-gray-300 font-medium py-2.5 rounded-sm transition-colors text-sm"
+                                style={headingStyle}
+                            >
+                                <Phone size={16} /> Call for Inquiry
+                            </a>
+                        </div>
                     </div>
                 </div>
-            )}
 
-            {/* ── Bottom CTA strip ── */}
-            <div className="bg-gradient-to-r from-violet-600 to-violet-700 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl shadow-violet-200">
-                <div className="text-white text-center sm:text-left">
-                    <p className="font-bold text-lg">Interested in this product?</p>
-                    <p className="text-violet-200 text-sm mt-0.5">Contact us now to place your order</p>
-                </div>
-                <div className="flex gap-3 flex-shrink-0">
-                    <a href={waLink} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm shadow-md">
-                        <MessageCircle size={16} /> WhatsApp
-                    </a>
-                    <a href={`tel:+${phoneNumber}`}
-                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm">
-                        <Phone size={16} /> Call
-                    </a>
-                </div>
             </div>
         </div>
     );
