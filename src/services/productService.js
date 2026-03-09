@@ -28,7 +28,7 @@ async function uploadImageToCloudinary(file) {
     throw new Error(`Cloudinary upload failed: ${data.error.message}`);
   }
 
-  return data.secure_url; // permanent https:// CDN URL
+  return data.secure_url;
 }
 
 // ─── Upload multiple images → returns array of URLs ──────────────────────────
@@ -38,17 +38,24 @@ export async function uploadImages(files) {
 }
 
 // ─── Add new product ──────────────────────────────────────────────────────────
-export async function addProduct(data, imageFiles) {
-  // 1. Upload images to Cloudinary
+export async function addProduct(data, imageFiles, coverImageFile = null) {
+  // 1. Upload gallery images
   let imageUrls = [];
   if (imageFiles && imageFiles.length > 0) {
     imageUrls = await uploadImages(imageFiles);
   }
 
-  // 2. Save product + Cloudinary URLs to Firestore
+  // 2. Upload cover image if a new file was selected
+  let coverImageUrl = data.coverImage || null;
+  if (coverImageFile) {
+    coverImageUrl = await uploadImageToCloudinary(coverImageFile);
+  }
+
+  // 3. Save to Firestore
   const docRef = await addDoc(collection(db, COL), {
     ...data,
     images: imageUrls,
+    coverImage: coverImageUrl,
     clicks: 0,
     createdAt: serverTimestamp(),
   });
@@ -80,23 +87,29 @@ export async function incrementProductClicks(productId) {
 }
 
 // ─── Delete product ───────────────────────────────────────────────────────────
-// Cloudinary image deletion requires API Secret (unsafe on frontend).
-// Product is removed from Firestore; image stays on Cloudinary CDN.
 export async function deleteProduct(productId) {
   await deleteDoc(doc(db, COL, productId));
 }
 
 // ─── Update product ───────────────────────────────────────────────────────────
-export async function updateProduct(productId, updatedData, newImageFiles = []) {
+export async function updateProduct(productId, updatedData, newImageFiles = [], coverImageFile = null) {
+  // 1. Merge existing + new gallery images
   let imageUrls = updatedData.images || [];
-
   if (newImageFiles && newImageFiles.length > 0) {
     const newUrls = await uploadImages(newImageFiles);
     imageUrls = [...imageUrls, ...newUrls];
   }
 
+  // 2. Upload new cover if a new file was selected, otherwise keep existing URL
+  let coverImageUrl = updatedData.coverImage || null;
+  if (coverImageFile) {
+    coverImageUrl = await uploadImageToCloudinary(coverImageFile);
+  }
+
+  // 3. Save to Firestore
   await updateDoc(doc(db, COL, productId), {
     ...updatedData,
     images: imageUrls,
+    coverImage: coverImageUrl,
   });
 }
