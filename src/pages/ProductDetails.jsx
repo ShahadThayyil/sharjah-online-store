@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProductById, incrementProductClicks } from "../services/productService";
 import {
-    MessageCircle, Phone, Tag, Truck, ChevronLeft, ChevronRight,
-    ArrowLeft, Package, ZoomIn, ShieldCheck
+    MessageCircle, Phone, Truck, ChevronLeft, ChevronRight,
+    ArrowLeft, Package, ZoomIn, ShieldCheck, Tag
 } from "lucide-react";
 
 // ─── Image Lightbox ───────────────────────────────────────────────────────────
@@ -15,9 +15,9 @@ function Lightbox({ src, alt, onClose }) {
     }, [onClose]);
 
     return (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4" onClick={onClose}>
-            <img src={src} alt={alt} className="max-w-full max-h-full object-contain rounded-sm shadow-2xl" onClick={e => e.stopPropagation()} />
-            <button onClick={onClose} className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-sm transition-colors">
+        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300" onClick={onClose}>
+            <img src={src} alt={alt} className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl scale-100" onClick={e => e.stopPropagation()} />
+            <button onClick={onClose} className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors backdrop-blur-md">
                 ✕
             </button>
         </div>
@@ -36,6 +36,7 @@ export default function ProductDetails() {
     const bodyStyle = { fontFamily: "'Open Sans', sans-serif" };
 
     useEffect(() => {
+        window.scrollTo(0, 0); // Always start at the top
         incrementProductClicks(id);
         async function load() {
             try { setProduct(await getProductById(id)); }
@@ -47,27 +48,32 @@ export default function ProductDetails() {
 
     // ── Loading skeleton ──────────────────────────────────────────────────────
     if (loading) return (
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 py-6 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded-sm w-32 mb-6" />
-            <div className="flex flex-col lg:flex-row gap-8">
-                <div className="w-full lg:w-5/12 aspect-[4/5] bg-gray-200 rounded-sm" />
-                <div className="w-full lg:w-7/12 space-y-4 pt-2">
-                    <div className="h-8 bg-gray-200 rounded-sm w-3/4" />
-                    <div className="h-4 bg-gray-100 rounded-sm w-1/4 mb-6" />
-                    <div className="h-10 bg-gray-200 rounded-sm w-1/3 mb-6" />
-                    <div className="h-4 bg-gray-100 rounded-sm w-full" />
-                    <div className="h-4 bg-gray-100 rounded-sm w-5/6" />
-                    <div className="h-4 bg-gray-100 rounded-sm w-4/6" />
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 py-12 md:py-24 animate-pulse pt-32">
+            <div className="h-4 bg-gray-200 rounded-full w-32 mb-8" />
+            <div className="flex flex-col lg:flex-row gap-12">
+                <div className="w-full lg:w-6/12 aspect-[4/5] bg-gray-200 rounded-[2rem]" />
+                <div className="w-full lg:w-6/12 space-y-6 pt-4">
+                    <div className="h-10 bg-gray-200 rounded-full w-3/4" />
+                    <div className="h-5 bg-gray-100 rounded-full w-1/4 mb-8" />
+                    <div className="h-14 bg-gray-200 rounded-full w-1/3 mb-10" />
+                    <div className="h-4 bg-gray-100 rounded-full w-full" />
+                    <div className="h-4 bg-gray-100 rounded-full w-5/6" />
+                    <div className="h-4 bg-gray-100 rounded-full w-4/6" />
                 </div>
             </div>
         </div>
     );
 
     if (!product) return (
-        <div className="text-center py-24 text-gray-400" style={bodyStyle}>
-            <Package size={48} strokeWidth={1} className="mx-auto mb-4 text-gray-300" />
-            <p className="text-xl font-semibold text-[#111111]" style={headingStyle}>Product not found.</p>
-            <Link to="/" className="text-[#2563EB] mt-4 inline-block hover:underline text-sm font-medium">← Back to shop</Link>
+        <div className="text-center py-32 md:py-48 text-gray-400 pt-48" style={bodyStyle}>
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Package size={48} strokeWidth={1} className="text-gray-400" />
+            </div>
+            <p className="text-2xl font-extrabold text-[#18181B] tracking-tight" style={headingStyle}>Product not found.</p>
+            <p className="text-gray-500 mt-2 max-w-sm mx-auto">This item might have been removed or is currently unavailable.</p>
+            <Link to="/" className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#18181B] hover:bg-[#C8102E] text-white rounded-full mt-8 font-bold transition-all shadow-lg hover:-translate-y-0.5">
+                <ArrowLeft size={16} /> Back to Collection
+            </Link>
         </div>
     );
 
@@ -99,181 +105,188 @@ export default function ProductDetails() {
     const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi! I'm interested in buying "${productName}". Could you please provide more details?`)}`;
 
     return (
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 py-6 text-[#111111]" style={bodyStyle}>
+        <div className="bg-[#F4F4F5] min-h-screen pb-20 pt-24 md:pt-32 text-[#18181B] selection:bg-[#C8102E] selection:text-white" style={bodyStyle}>
 
             {lightbox && <Lightbox src={lightbox} alt={productName} onClose={() => setLightbox(null)} />}
 
-            {/* Breadcrumb / Back */}
-            <div className="mb-4">
-                <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#2563EB] transition-colors font-medium">
-                    <ArrowLeft size={14} /> Back to results
-                </Link>
-            </div>
+            <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
+                
+                {/* ── Breadcrumb / Back ── */}
+                <div className="mb-8">
+                    <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#18181B] transition-colors font-bold uppercase tracking-wider">
+                        <ArrowLeft size={16} strokeWidth={2.5} /> Back to Collection
+                    </Link>
+                </div>
 
-            {/* ── Main Layout Split ── */}
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+                {/* ── Main Layout Split ── */}
+                <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-start">
 
-                {/* ── LEFT: Image Gallery ── */}
-                <div className="w-full lg:w-5/12 flex flex-col lg:flex-row gap-4 sticky top-24">
-                    
-                    {/* Main Image */}
-                    <div className="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/5] bg-white border border-gray-200 rounded-sm flex items-center justify-center group cursor-zoom-in order-1 lg:order-none">
-                        <img
-                            src={galleryImgs[activeImg]}
-                            alt={productName}
-                            onClick={() => setLightbox(galleryImgs[activeImg])}
-                            className="w-full h-full object-contain p-2"
-                        />
-                        <button
-                            onClick={() => setLightbox(galleryImgs[activeImg])}
-                            className="absolute top-3 right-3 bg-white border border-gray-200 p-2 rounded-sm shadow-sm text-gray-500 hover:text-[#2563EB] opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                            <ZoomIn size={18} />
-                        </button>
+                    {/* ── LEFT: Editorial Image Gallery ── */}
+                    <div className="w-full lg:w-6/12 flex flex-col gap-4 lg:sticky lg:top-32">
                         
+                        {/* Main Image Frame */}
+                        <div className="relative w-full aspect-[4/5] bg-white rounded-[2rem] border border-gray-100 flex items-center justify-center group overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                            <img
+                                src={galleryImgs[activeImg]}
+                                alt={productName}
+                                onClick={() => setLightbox(galleryImgs[activeImg])}
+                                className="w-full h-full object-contain p-6 md:p-12 transition-transform duration-[1.5s] ease-out group-hover:scale-105 cursor-zoom-in"
+                            />
+                            
+                            {/* Floating Zoom Button */}
+                            <button
+                                onClick={() => setLightbox(galleryImgs[activeImg])}
+                                className="absolute top-5 right-5 bg-[#F4F4F5]/80 backdrop-blur-md hover:bg-[#18181B] hover:text-white p-3 rounded-full shadow-sm text-gray-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300"
+                            >
+                                <ZoomIn size={20} />
+                            </button>
+                            
+                            {/* Navigation Chevrons */}
+                            {galleryImgs.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p - 1 + galleryImgs.length) % galleryImgs.length); }}
+                                        className="absolute left-5 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md p-3.5 rounded-full shadow-md text-[#18181B] hover:bg-[#C8102E] hover:text-white lg:opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                    >
+                                        <ChevronLeft size={24} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p + 1) % galleryImgs.length); }}
+                                        className="absolute right-5 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md p-3.5 rounded-full shadow-md text-[#18181B] hover:bg-[#C8102E] hover:text-white lg:opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                    >
+                                        <ChevronRight size={24} />
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Thumbnails */}
                         {galleryImgs.length > 1 && (
-                            <>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p - 1 + galleryImgs.length) % galleryImgs.length); }}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 p-2 rounded-sm shadow-sm hover:text-[#2563EB] lg:opacity-0 group-hover:opacity-100 transition-all"
-                                >
-                                    <ChevronLeft size={20} />
-                                </button>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setActiveImg(p => (p + 1) % galleryImgs.length); }}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 p-2 rounded-sm shadow-sm hover:text-[#2563EB] lg:opacity-0 group-hover:opacity-100 transition-all"
-                                >
-                                    <ChevronRight size={20} />
-                                </button>
-                            </>
+                            <div className="flex gap-3 overflow-x-auto hide-scrollbar py-2">
+                                {galleryImgs.map((src, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setActiveImg(i)}
+                                        className={`w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-2xl overflow-hidden border-[3px] transition-all duration-300 ${
+                                            activeImg === i ? "border-[#C8102E] shadow-md scale-105" : "border-transparent opacity-60 hover:opacity-100 hover:scale-105 bg-white"
+                                        }`}
+                                    >
+                                        <img src={src} alt="" className="w-full h-full object-cover p-1" />
+                                    </button>
+                                ))}
+                            </div>
                         )}
                     </div>
 
-                    {/* Thumbnails (Right Side on LG, Bottom on Mobile/Tablet) */}
-                    {galleryImgs.length > 1 && (
-                        <div className="flex lg:flex-col gap-2 overflow-auto hide-scrollbar shrink-0 order-2 lg:order-none">
-                            {galleryImgs.map((src, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setActiveImg(i)}
-                                    className={`w-16 h-16 lg:w-20 lg:h-20 shrink-0 rounded-sm overflow-hidden border-2 transition-all ${
-                                        activeImg === i ? "border-[#2563EB]" : "border-transparent opacity-70 hover:opacity-100 hover:border-gray-300"
-                                    }`}
-                                >
-                                    <img src={src} alt="" className="w-full h-full object-cover" />
-                                </button>
-                            ))}
+                    {/* ── RIGHT: Details & Buy Box ── */}
+                    <div className="w-full lg:w-6/12 flex-1 flex flex-col pt-2 lg:pt-0">
+                        
+                        {/* Title & Category */}
+                        <div className="mb-8">
+                            <span className="inline-flex items-center gap-1.5 bg-[#18181B] text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-sm" style={headingStyle}>
+                                <Tag size={12} className="text-[#C8102E]" />
+                                {category}
+                            </span>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#18181B] leading-[1.1] tracking-tight" style={headingStyle}>
+                                {productName}
+                            </h1>
                         </div>
-                    )}
-                </div>
 
-                {/* ── CENTER: Product Details ── */}
-                <div className="w-full lg:w-4/12 flex-1 flex flex-col border-b lg:border-b-0 pb-8 lg:pb-0">
-                    <span className="text-[#2563EB] font-semibold text-sm tracking-wide mb-1" style={headingStyle}>
-                        {category}
-                    </span>
-                    <h1 className="text-2xl md:text-3xl font-bold text-[#111111] leading-tight mb-2" style={headingStyle}>
-                        {productName}
-                    </h1>
-
-                    <hr className="my-4 border-gray-200" />
-
-                    {/* Price Tag */}
-                    <div className="mb-4">
-                        <span className="text-sm text-gray-500 font-medium">Price</span>
-                        <div className="flex items-start text-[#111111]">
-                            <span className="text-lg font-semibold mt-1 mr-0.5">₹</span>
-                            <span className="text-4xl font-bold" style={headingStyle}>{Number(price).toFixed(2)}</span>
+                        {/* Price Block */}
+                        <div className="flex items-end gap-3 mb-10 pb-10 border-b border-gray-200/60">
+                            <span className="text-[#18181B] font-extrabold text-5xl tracking-tighter" style={headingStyle}>
+                                <span className="text-3xl mr-1">₹</span>{Number(price).toFixed(2)}
+                            </span>
+                            <span className="text-sm font-bold text-gray-400 mb-1.5">Inc. taxes</span>
                         </div>
-                        <span className="text-xs text-gray-500">Inclusive of all taxes</span>
-                    </div>
 
-                    {material && (
-                        <div className="mb-4 text-sm">
-                            <span className="font-semibold text-gray-900">Material:</span> <span className="text-gray-600">{material}</span>
-                        </div>
-                    )}
+                        {/* Material Info */}
+                        {material && (
+                            <div className="mb-10 text-base">
+                                <span className="font-extrabold text-[#18181B] uppercase tracking-wide text-xs">Material</span> 
+                                <p className="text-gray-600 mt-1 font-medium">{material}</p>
+                            </div>
+                        )}
 
-                    {/* About this item (Bullets) */}
-                    {descArray.length > 0 && (
-                        <div className="mt-2 mb-6">
-                            <h3 className="text-base font-bold text-[#111111] mb-2" style={headingStyle}>About this item</h3>
-                            <ul className="space-y-2 pl-1">
-                                {descArray.map((point, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 shrink-0"></div>
-                                        <span>{point}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+                        {/* About this item (Bullets) */}
+                        {descArray.length > 0 && (
+                            <div className="mb-10">
+                                <h3 className="text-sm font-extrabold text-[#18181B] uppercase tracking-wide mb-4" style={headingStyle}>The Details</h3>
+                                <ul className="space-y-4">
+                                    {descArray.map((point, i) => (
+                                        <li key={i} className="flex items-start gap-4 text-base text-gray-600 leading-relaxed font-medium">
+                                            <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 shrink-0 shadow-sm"></div>
+                                            <span>{point}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
 
-                    {/* Specs Table integrated into details flow */}
-                    {specsArray.length > 0 && (
-                        <div className="mt-4">
-                            <h3 className="text-base font-bold text-[#111111] mb-3" style={headingStyle}>Specifications</h3>
-                            <div className="border border-gray-200 rounded-sm overflow-hidden text-sm">
-                                {specsArray.map((spec, i) => (
-                                    <div key={i} className={`flex px-4 py-2.5 ${i % 2 === 0 ? "bg-gray-50" : "bg-white"} border-b border-gray-100 last:border-0`}>
-                                        <span className="w-1/3 font-semibold text-[#111111]">{spec.key}</span>
-                                        <span className="w-2/3 text-gray-600">{spec.value}</span>
+                        {/* Specs Table */}
+                        {specsArray.length > 0 && (
+                            <div className="mb-10">
+                                <h3 className="text-sm font-extrabold text-[#18181B] uppercase tracking-wide mb-4" style={headingStyle}>Specifications</h3>
+                                <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm text-sm">
+                                    {specsArray.map((spec, i) => (
+                                        <div key={i} className={`flex px-6 py-4 ${i % 2 === 0 ? "bg-transparent" : "bg-gray-50/50"} border-b border-gray-100 last:border-0`}>
+                                            <span className="w-2/5 font-extrabold text-[#18181B]">{spec.key}</span>
+                                            <span className="w-3/5 text-gray-500 font-medium">{spec.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ── FLOATING BUY BOX ── */}
+                        <div className="bg-white border border-gray-100 rounded-[2rem] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)] mt-4">
+                            
+                            {/* Delivery & Trust Badges */}
+                            <div className="text-sm text-gray-600 font-medium mb-8 space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-[#F4F4F5] p-2.5 rounded-full">
+                                        <Truck size={18} className="text-[#18181B]" />
                                     </div>
-                                ))}
+                                    <span>{deliveryDetails ? deliveryDetails : "Standard premium delivery available"}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-green-50 p-2.5 rounded-full">
+                                        <ShieldCheck size={18} className="text-green-600" />
+                                    </div>
+                                    <span className="text-green-700">Secure direct transaction via WhatsApp</span>
+                                </div>
+                            </div>
+
+                            {/* Call to Action Buttons */}
+                            <div className="flex flex-col gap-4">
+                                <a
+                                    href={waLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group w-full flex items-center justify-center gap-3 bg-[#18181B] hover:bg-[#C8102E] text-white font-bold py-4 rounded-full transition-all duration-300 text-sm md:text-base shadow-xl shadow-[#18181B]/10 hover:shadow-[#C8102E]/20 hover:-translate-y-1"
+                                    style={headingStyle}
+                                >
+                                    <MessageCircle size={20} className="group-hover:scale-110 transition-transform" /> Order via WhatsApp
+                                </a>
+                                <a
+                                    href={`tel:+${phoneNumber}`}
+                                    className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-[#18181B] border-2 border-gray-200 font-extrabold py-4 rounded-full transition-colors duration-300 text-sm md:text-base"
+                                    style={headingStyle}
+                                >
+                                    <Phone size={18} /> Inquire by Phone
+                                </a>
                             </div>
                         </div>
-                    )}
-                </div>
 
-                {/* ── RIGHT: Buy Box (CTAs) ── */}
-                <div className="w-full lg:w-3/12 shrink-0">
-                    <div className="border border-gray-200 rounded-sm p-5 bg-white shadow-sm sticky top-24">
-                        <div className="flex items-center gap-2 text-[#111111] font-bold text-xl mb-4" style={headingStyle}>
-                            <span className="text-sm font-semibold">₹</span>{Number(price).toFixed(2)}
-                        </div>
-                        
-                        <div className="text-sm text-gray-600 mb-6 space-y-3">
-                            {deliveryDetails ? (
-                                <div className="flex items-start gap-2">
-                                    <Truck size={18} className="text-gray-400 shrink-0 mt-0.5" />
-                                    <span>{deliveryDetails}</span>
-                                </div>
-                            ) : (
-                                <div className="flex items-start gap-2">
-                                    <Truck size={18} className="text-gray-400 shrink-0 mt-0.5" />
-                                    <span>Standard delivery available</span>
-                                </div>
-                            )}
-                            <div className="flex items-start gap-2">
-                                <ShieldCheck size={18} className="text-gray-400 shrink-0 mt-0.5" />
-                                <span>Secure transaction via WhatsApp</span>
-                            </div>
-                        </div>
-
-                        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Place Order</h4>
-                        
-                        <div className="flex flex-col gap-3">
-                            <a
-                                href={waLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-2 bg-[#2563EB] hover:bg-blue-700 text-white font-medium py-2.5 rounded-sm transition-colors text-sm"
-                                style={headingStyle}
-                            >
-                                <MessageCircle size={16} /> Order via WhatsApp
-                            </a>
-                            <a
-                                href={`tel:+${phoneNumber}`}
-                                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-[#111111] border border-gray-300 font-medium py-2.5 rounded-sm transition-colors text-sm"
-                                style={headingStyle}
-                            >
-                                <Phone size={16} /> Call for Inquiry
-                            </a>
-                        </div>
                     </div>
                 </div>
-
             </div>
+
+            {/* Inject CSS to hide scrollbar for thumbnails */}
+            <style>{`
+                .hide-scrollbar::-webkit-scrollbar { display: none; }
+                .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Tag, ArrowRight } from "lucide-react";
+import { Tag, ArrowUpRight } from "lucide-react";
 
 export default function ProductCard({ product }) {
     const { productId, productName, price, category, images, coverImage, description } = product;
@@ -17,67 +17,72 @@ export default function ProductCard({ product }) {
     return (
         <Link 
             to={`/product/${productId}`}
-            // Modern Hover
-            className="group flex flex-col w-full h-full bg-white rounded-xl border border-gray-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] overflow-hidden transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)]"
+            // ─── Responsive Padding & Radius ───
+            // Mobile: p-2, rounded-3xl | Desktop: p-3, rounded-[2rem]
+            className="group flex flex-col w-full h-full bg-white rounded-3xl sm:rounded-[2rem] p-2 sm:p-3 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(200,16,46,0.15)] cursor-pointer"
         >
-            {/* Image Box */}
-            <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden flex items-center justify-center">
+            {/* ─── Inner Image Container ─── */}
+            <div className="relative w-full aspect-[4/5] bg-[#F4F4F5] rounded-2xl sm:rounded-[1.5rem] overflow-hidden mb-3 sm:mb-4">
                 <img 
                     src={thumbnail} 
                     alt={productName}
-                    // Smooth, modern slow-zoom on hover
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+                    // Ultra-smooth, slow zoom
+                    className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110" 
                 />
                 
-                {/* Category Tag - hidden on extra small screens to save space, visible otherwise */}
+                {/* Category Tag - Scales down for mobile */}
                 {category && (
                     <span 
-                        className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 bg-white/90 backdrop-blur-md text-[#111111] text-[9px] sm:text-[10px] font-bold px-1.5 py-1 sm:px-2.5 sm:py-1.5 rounded-md shadow-sm uppercase tracking-wider"
+                        className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 sm:gap-1.5 bg-white/80 backdrop-blur-md text-[#18181B] text-[9px] sm:text-[10px] font-extrabold px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest transition-colors duration-300 group-hover:bg-white shadow-sm"
                         style={headingStyle}
                     >
-                        <Tag size={10} className="text-[#2563EB] hidden sm:block" /> 
+                        <Tag size={10} className="text-[#C8102E] sm:w-3 sm:h-3" /> 
                         <span className="truncate max-w-[60px] sm:max-w-none">{category}</span>
                     </span>
                 )}
 
-                {/* Desktop Hover Overlay: "Quick View" badge */}
-                <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out hidden lg:flex justify-center pointer-events-none">
-                    <span className="bg-white/95 backdrop-blur-sm text-[#111111] text-xs font-bold py-2 px-6 rounded-full shadow-lg" style={headingStyle}>
-                        Quick View
+                {/* Dark, sleek "View" pill on hover (Desktop Only) */}
+                <div className="absolute inset-x-0 bottom-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out hidden lg:flex justify-center pointer-events-none">
+                    <span className="bg-[#18181B]/95 backdrop-blur-sm text-white text-xs font-bold py-3 px-8 rounded-full shadow-xl tracking-wide uppercase" style={headingStyle}>
+                        View Product
                     </span>
                 </div>
             </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col flex-1 p-2.5 sm:p-4 md:p-5">
-                <h3 
-                    className="font-bold text-[#111111] text-xs sm:text-base md:text-lg leading-snug line-clamp-1 mb-1 sm:mb-1.5 group-hover:text-[#2563EB] transition-colors duration-300"
-                    style={headingStyle}
-                >
-                    {productName}
-                </h3>
+            {/* ─── Content Section ─── */}
+            <div className="flex flex-col flex-1 px-1 sm:px-2 pb-1 sm:pb-2">
                 
-                {/* Description - Clamped to strictly 4 lines with ellipsis */}
+                {/* Title and Action Arrow */}
+                <div className="flex items-start justify-between gap-2 sm:gap-4 mb-1 sm:mb-2">
+                    <h3 
+                        className="font-extrabold text-[#18181B] text-sm sm:text-base md:text-xl leading-snug line-clamp-2 group-hover:text-[#C8102E] transition-colors duration-300 tracking-tight"
+                        style={headingStyle}
+                    >
+                        {productName}
+                    </h3>
+                    
+                    {/* Modern diagonal arrow - shrinks on mobile so it doesn't crush the title */}
+                    <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#F4F4F5] text-gray-400 shadow-none group-hover:bg-[#C8102E] group-hover:text-white group-hover:rotate-45 group-hover:shadow-md transition-all duration-300">
+                        <ArrowUpRight size={14} strokeWidth={2.5} className="sm:w-4 sm:h-4" />
+                    </div>
+                </div>
+                
+                {/* Description */}
                 <p 
-                    className="text-gray-500 text-[10px] sm:text-sm line-clamp-4 mb-3 sm:mb-4 leading-relaxed"
+                    className="text-gray-500 text-xs sm:text-sm line-clamp-2 leading-relaxed mb-3 sm:mb-4"
                     style={bodyStyle}
                 >
                     {displayDesc}
                 </p>
                 
-                {/* Price & Modern Action Arrow */}
-                <div className="flex items-center justify-between mt-auto pt-2 sm:pt-4 border-t border-gray-100">
+                {/* Price pinned to the bottom */}
+                <div className="mt-auto pt-2 border-t border-gray-50">
                     <span 
-                        className="text-[#111111] font-bold text-sm sm:text-lg md:text-xl tracking-tight"
+                        className="text-[#18181B] font-extrabold text-base sm:text-lg md:text-xl tracking-tighter"
                         style={headingStyle}
                     >
                         ₹{Number(price).toFixed(2)}
                     </span>
-                    
-                    {/* Modern circular arrow */}
-                    <div className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-50 text-gray-400 group-hover:bg-[#2563EB] group-hover:text-white transition-colors duration-300">
-                        <ArrowRight size={12} className="sm:w-4 sm:h-4" />
-                    </div>
                 </div>
             </div>
         </Link>

@@ -13,8 +13,8 @@ import {
 const DEFAULT_CATEGORIES = ["Toys", "Phone Cases", "Accessories", "Stationery", "Other"];
 
 // ── Set your default contact numbers here ─────────────────────────────────────
-const DEFAULT_WHATSAPP = "60123456789"; // change to your real number
-const DEFAULT_CALL     = "60123456789"; // change to your real number
+const DEFAULT_WHATSAPP = "60123456789"; 
+const DEFAULT_CALL     = "60123456789"; 
 
 const EMPTY_FORM = {
     productName: "",
@@ -27,13 +27,17 @@ const EMPTY_FORM = {
     callNumber: DEFAULT_CALL,
 };
 
+// ─── Theme Fonts ──────────────────────────────────────────────────────────────
+const headingStyle = { fontFamily: "'Poppins', sans-serif" };
+const bodyStyle = { fontFamily: "'Open Sans', sans-serif" };
+
 // ─── Toast ────────────────────────────────────────────────────────────────────
 function Toast({ toast }) {
     if (!toast.msg) return null;
     return (
-        <div className={`fixed top-5 right-5 z-[70] flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-2xl text-sm text-white font-medium
-            ${toast.type === "error" ? "bg-red-500" : "bg-emerald-500"}`}>
-            {toast.type === "error" ? <XCircle size={16} /> : <CheckCircle size={16} />}
+        <div className={`fixed top-5 right-5 z-[70] flex items-center gap-2.5 px-6 py-3.5 rounded-full shadow-2xl text-sm text-white font-bold tracking-wide
+            ${toast.type === "error" ? "bg-[#C8102E]" : "bg-[#18181B]"}`} style={headingStyle}>
+            {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle size={18} className="text-[#C8102E]" />}
             {toast.msg}
         </div>
     );
@@ -43,18 +47,18 @@ function Toast({ toast }) {
 function ConfirmDialog({ open, productName, onConfirm, onCancel }) {
     if (!open) return null;
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-7 text-center">
-                <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                    <AlertTriangle size={26} className="text-red-500" />
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 transition-all" style={bodyStyle}>
+            <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-sm p-8 text-center animate-fade-in-up">
+                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <AlertTriangle size={28} className="text-[#C8102E]" />
                 </div>
-                <h3 className="font-bold text-slate-800 text-xl mb-2">Delete Product?</h3>
-                <p className="text-slate-500 text-sm mb-7 leading-relaxed">
-                    <span className="font-semibold text-slate-700">"{productName}"</span> will be permanently removed.
+                <h3 className="font-extrabold text-[#18181B] text-2xl mb-2" style={headingStyle}>Delete Product?</h3>
+                <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                    <span className="font-bold text-[#18181B]">"{productName}"</span> will be permanently removed from your store.
                 </p>
                 <div className="flex gap-3">
-                    <button onClick={onCancel} className="flex-1 py-3 border-2 border-slate-200 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-semibold transition-colors">Cancel</button>
-                    <button onClick={onConfirm} className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-bold transition-colors">Delete</button>
+                    <button onClick={onCancel} className="flex-1 py-3.5 border border-gray-200 rounded-full text-sm text-[#18181B] hover:border-[#18181B] font-bold transition-all">Cancel</button>
+                    <button onClick={onConfirm} className="flex-1 py-3.5 bg-[#C8102E] hover:bg-[#a50d26] text-white rounded-full text-sm font-bold shadow-lg shadow-[#C8102E]/20 transition-all">Delete</button>
                 </div>
             </div>
         </div>
@@ -65,14 +69,14 @@ function ConfirmDialog({ open, productName, onConfirm, onCancel }) {
 function SuccessDialog({ open, message, onClose }) {
     if (!open) return null;
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-7 text-center">
-                <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                    <CheckCircle size={32} className="text-emerald-500" />
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 transition-all" style={bodyStyle}>
+            <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-sm p-8 text-center animate-fade-in-up">
+                <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle size={32} className="text-green-500" />
                 </div>
-                <h3 className="font-bold text-slate-800 text-xl mb-2">Done!</h3>
-                <p className="text-slate-500 text-sm mb-7">{message}</p>
-                <button onClick={onClose} className="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-bold transition-colors">
+                <h3 className="font-extrabold text-[#18181B] text-2xl mb-2" style={headingStyle}>Done!</h3>
+                <p className="text-gray-500 text-sm mb-8">{message}</p>
+                <button onClick={onClose} className="w-full py-4 bg-[#18181B] hover:bg-[#C8102E] text-white rounded-full text-sm font-bold transition-colors shadow-lg">
                     Continue
                 </button>
             </div>
@@ -83,11 +87,11 @@ function SuccessDialog({ open, message, onClose }) {
 // ─── Section Label ────────────────────────────────────────────────────────────
 function SectionLabel({ icon: Icon, label }) {
     return (
-        <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 bg-violet-100 rounded-lg flex items-center justify-center">
-                <Icon size={13} className="text-violet-600" />
+        <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-7 h-7 bg-[#F4F4F5] rounded-full flex items-center justify-center">
+                <Icon size={14} className="text-[#C8102E]" />
             </div>
-            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">{label}</span>
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#18181B]" style={headingStyle}>{label}</span>
         </div>
     );
 }
@@ -108,23 +112,23 @@ function CategorySelector({ value, onChange, categories, onAddCategory }) {
 
     return (
         <div>
-            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Category *</label>
+            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Category *</label>
             {!showCustomInput ? (
                 <div className="flex gap-2">
                     <select
                         value={value}
                         onChange={e => onChange(e.target.value)}
-                        className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all"
+                        className="flex-1 border-none rounded-full px-5 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B] cursor-pointer"
                     >
                         {categories.map(c => <option key={c}>{c}</option>)}
                     </select>
                     <button
                         type="button"
                         onClick={() => setShowCustomInput(true)}
-                        className="flex items-center gap-1.5 px-3 py-2 bg-violet-50 hover:bg-violet-100 text-violet-600 text-xs font-bold rounded-xl transition-colors border border-violet-200 whitespace-nowrap"
+                        className="flex items-center gap-1.5 px-5 py-3.5 bg-[#18181B] hover:bg-[#C8102E] text-white text-xs font-bold rounded-full transition-colors whitespace-nowrap shadow-md"
                         title="Add custom category"
                     >
-                        <Plus size={13} /> New
+                        <Plus size={14} strokeWidth={3} /> New
                     </button>
                 </div>
             ) : (
@@ -136,15 +140,15 @@ function CategorySelector({ value, onChange, categories, onAddCategory }) {
                         value={customValue}
                         onChange={e => setCustomValue(e.target.value)}
                         onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } if (e.key === "Escape") setShowCustomInput(false); }}
-                        className="flex-1 border-2 border-violet-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-white transition-all"
+                        className="flex-1 border-none rounded-full px-5 py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-[#F4F4F5] transition-all text-[#18181B]"
                     />
                     <button type="button" onClick={handleAdd}
-                        className="px-3 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl transition-colors">
+                        className="px-5 py-3.5 bg-[#C8102E] hover:bg-[#a50d26] text-white text-xs font-bold rounded-full transition-colors shadow-md">
                         Add
                     </button>
                     <button type="button" onClick={() => { setShowCustomInput(false); setCustomValue(""); }}
-                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-500 text-xs font-bold rounded-xl transition-colors">
-                        <X size={14} />
+                        className="px-4 py-3.5 bg-gray-200 hover:bg-gray-300 text-gray-600 text-xs font-bold rounded-full transition-colors">
+                        <X size={16} />
                     </button>
                 </div>
             )}
@@ -158,7 +162,6 @@ export default function Products() {
     const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
 
-    // Dynamic categories (persisted in localStorage)
     const [categories, setCategories] = useState(() => {
         try {
             const saved = localStorage.getItem("shop_categories");
@@ -173,7 +176,6 @@ export default function Products() {
     const [editingId, setEditingId] = useState(null);
     const [editExistingImages, setEditExistingImages] = useState([]);
 
-    // ── Cover image state ─────────────────────────────────────────────────────
     const [coverImageFile, setCoverImageFile] = useState(null);
     const [coverPreview, setCoverPreview] = useState(null);
     const [editExistingCover, setEditExistingCover] = useState(null);
@@ -185,7 +187,6 @@ export default function Products() {
     const [successDialog, setSuccessDialog] = useState({ open: false, message: "" });
     const [confirmDialog, setConfirmDialog] = useState({ open: false, product: null });
 
-    // ── Load ──────────────────────────────────────────────────────────────────
     async function loadProducts() {
         setFetchLoading(true);
         try {
@@ -214,7 +215,6 @@ export default function Products() {
         setTimeout(() => setToast({ msg: "", type: "success" }), 3500);
     }
 
-    // ── Add custom category ───────────────────────────────────────────────────
     function handleAddCategory(newCat) {
         if (categories.includes(newCat)) return;
         const updated = [...categories, newCat];
@@ -223,12 +223,10 @@ export default function Products() {
         showToastMsg(`Category "${newCat}" added!`);
     }
 
-    // ── Bullet helpers ────────────────────────────────────────────────────────
     function updateBullet(i, v) { const b = [...bulletPoints]; b[i] = v; setBulletPoints(b); }
     function addBullet() { setBulletPoints([...bulletPoints, ""]); }
     function removeBullet(i) { if (bulletPoints.length > 1) setBulletPoints(bulletPoints.filter((_, j) => j !== i)); }
 
-    // ── Spec helpers ──────────────────────────────────────────────────────────
     function addSpec() { setForm({ ...form, specs: [...(form.specs || []), { key: "", value: "" }] }); }
     function updateSpec(i, field, val) {
         const s = [...(form.specs || [])]; s[i] = { ...s[i], [field]: val };
@@ -236,7 +234,6 @@ export default function Products() {
     }
     function removeSpec(i) { setForm({ ...form, specs: (form.specs || []).filter((_, j) => j !== i) }); }
 
-    // ── Images ────────────────────────────────────────────────────────────────
     function handleImageChange(e) {
         const maxNew = 5 - editExistingImages.length;
         const files = Array.from(e.target.files).slice(0, maxNew);
@@ -244,7 +241,6 @@ export default function Products() {
         setPreviews(files.map(f => URL.createObjectURL(f)));
     }
 
-    // ── Cover image ───────────────────────────────────────────────────────────
     function handleCoverImageChange(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -259,7 +255,6 @@ export default function Products() {
         setEditExistingCover(null);
     }
 
-    // ── Modal ─────────────────────────────────────────────────────────────────
     function openAdd() {
         setEditingId(null);
         setForm(EMPTY_FORM);
@@ -291,7 +286,6 @@ export default function Products() {
             typeof desc === "string" && desc ? desc.split("\n").filter(Boolean) :
             [""]
         );
-        // make sure the product's category is in our list
         if (product.category && !categories.includes(product.category)) {
             handleAddCategory(product.category);
         }
@@ -318,7 +312,6 @@ export default function Products() {
         setEditExistingCover(null);
     }
 
-    // ── Submit ────────────────────────────────────────────────────────────────
     async function handleSubmit(e) {
         e.preventDefault();
         if (!form.productName || !form.price) return;
@@ -330,7 +323,6 @@ export default function Products() {
             ...form,
             description: cleanBullets,
             specs: cleanSpecs,
-            // keep existing cover URL if no new file selected
             coverImage: editExistingCover || null,
         };
 
@@ -354,7 +346,6 @@ export default function Products() {
         }
     }
 
-    // ── Delete ────────────────────────────────────────────────────────────────
     async function confirmDelete() {
         const product = confirmDialog.product;
         setConfirmDialog({ open: false, product: null });
@@ -367,46 +358,58 @@ export default function Products() {
         }
     }
 
-    // current cover to display (new preview takes priority over saved URL)
     const displayCover = coverPreview || editExistingCover;
 
-    // ─────────────────────────────────────────────────────────────────────────
     return (
-        <div>
+        <div className="bg-[#F4F4F5] min-h-screen pb-12 text-[#18181B]" style={bodyStyle}>
             <Toast toast={toast} />
             <SuccessDialog open={successDialog.open} message={successDialog.message} onClose={() => setSuccessDialog({ open: false, message: "" })} />
             <ConfirmDialog open={confirmDialog.open} productName={confirmDialog.product?.productName} onConfirm={confirmDelete} onCancel={() => setConfirmDialog({ open: false, product: null })} />
 
+            {/* Custom Animations */}
+            <style>{`
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+                .delay-100 { animation-delay: 100ms; }
+                .delay-200 { animation-delay: 200ms; }
+            `}</style>
+
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pt-6 animate-fade-in-up">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-800">Products</h1>
-                    <p className="text-slate-500 text-sm mt-0.5">Manage your shop inventory</p>
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-[#18181B] tracking-tight" style={headingStyle}>Inventory.</h1>
+                    <p className="text-gray-500 text-sm mt-1">Manage and update your store catalog.</p>
                 </div>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm shadow-sm shadow-violet-200">
-                    <Plus size={16} /> Add Product
+                <button onClick={openAdd} className="flex items-center justify-center w-full sm:w-auto gap-2 bg-[#18181B] hover:bg-[#C8102E] text-white font-bold px-8 py-3.5 rounded-full transition-all duration-300 text-sm shadow-lg shadow-[#18181B]/10 hover:-translate-y-0.5">
+                    <Plus size={18} strokeWidth={2.5} /> Add Product
                 </button>
             </div>
 
-            {/* Search */}
-            <div className="relative mb-5">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type="text" placeholder="Search by name or category..." value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition-all" />
-            </div>
+            {/* Search and Table Container */}
+            <div className="bg-white rounded-3xl md:rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden animate-fade-in-up delay-100">
+                
+                {/* Search Bar */}
+                <div className="p-4 md:p-6 border-b border-gray-50">
+                    <div className="relative w-full md:max-w-md">
+                        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input type="text" placeholder="Search by name or category..." value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            className="w-full pl-12 pr-4 py-3.5 bg-[#F4F4F5] border border-transparent rounded-full text-sm font-medium focus:outline-none focus:border-[#C8102E] focus:ring-2 focus:ring-[#C8102E]/10 transition-all text-[#18181B]" />
+                    </div>
+                </div>
 
-            {/* Table */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-                    <h2 className="font-semibold text-slate-700 text-sm">
-                        {fetchLoading ? "Loading..." : `${filtered.length} product${filtered.length !== 1 ? "s" : ""}`}
+                <div className="px-4 md:px-6 py-4 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
+                    <h2 className="font-extrabold text-[#18181B] text-sm tracking-wide uppercase" style={headingStyle}>
+                        {fetchLoading ? "Loading..." : `${filtered.length} Product${filtered.length !== 1 ? "s" : ""}`}
                     </h2>
                     {/* Category pills */}
-                    <div className="hidden sm:flex gap-1.5 flex-wrap">
+                    <div className="hidden md:flex gap-2 flex-wrap">
                         {categories.slice(0, 5).map(cat => (
                             <button key={cat} onClick={() => setSearch(cat === search ? "" : cat)}
-                                className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-colors ${search === cat ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-violet-50 hover:text-violet-600"}`}>
+                                className={`text-[10px] font-bold px-4 py-1.5 rounded-full transition-all duration-300 uppercase tracking-wider ${search === cat ? "bg-[#18181B] text-white shadow-md" : "bg-[#F4F4F5] text-gray-500 hover:bg-[#C8102E] hover:text-white"}`}>
                                 {cat}
                             </button>
                         ))}
@@ -414,131 +417,186 @@ export default function Products() {
                 </div>
 
                 {fetchLoading ? (
-                    <div className="divide-y divide-slate-50">
+                    <div className="divide-y divide-gray-50">
                         {Array.from({ length: 5 }).map((_, i) => (
-                            <div key={i} className="flex items-center gap-4 px-5 py-3 animate-pulse">
-                                <div className="w-10 h-10 rounded-lg bg-slate-100" />
-                                <div className="flex-1 space-y-2">
-                                    <div className="h-3 bg-slate-100 rounded w-1/2" />
-                                    <div className="h-2.5 bg-slate-50 rounded w-1/4" />
+                            <div key={i} className="flex items-center gap-4 px-6 py-5 animate-pulse">
+                                <div className="w-14 h-14 rounded-2xl bg-gray-100" />
+                                <div className="flex-1 space-y-3">
+                                    <div className="h-3 bg-gray-100 rounded-full w-1/3" />
+                                    <div className="h-2.5 bg-gray-50 rounded-full w-1/4" />
                                 </div>
-                                <div className="w-20 h-3 bg-slate-100 rounded" />
-                                <div className="w-14 h-3 bg-slate-100 rounded" />
                             </div>
                         ))}
                     </div>
                 ) : filtered.length === 0 ? (
-                    <div className="py-20 text-center text-slate-400">
-                        <Package size={40} strokeWidth={1.2} className="mx-auto mb-3 text-slate-200" />
-                        <p className="font-medium">No products found</p>
-                        <p className="text-sm mt-1">{search ? "Try a different search term" : "Add your first product above"}</p>
+                    <div className="py-24 text-center text-gray-400">
+                        <Package size={48} strokeWidth={1} className="mx-auto mb-4 text-gray-300" />
+                        <p className="font-extrabold text-xl text-[#18181B] mb-1" style={headingStyle}>No products found.</p>
+                        <p className="text-sm">{search ? "Try adjusting your search filters." : "Start building your catalog."}</p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                                <tr>
-                                    <th className="px-5 py-3 text-left">Product</th>
-                                    <th className="px-4 py-3 text-left">Category</th>
-                                    <th className="px-4 py-3 text-left">Price</th>
-                                    <th className="px-4 py-3 text-left">
-                                        <span className="flex items-center gap-1"><MousePointerClick size={12} /> Clicks</span>
-                                    </th>
-                                    <th className="px-4 py-3 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-50">
-                                {filtered.map(p => (
-                                    <tr key={p.productId} className="hover:bg-slate-50/60 transition-colors">
-                                        <td className="px-5 py-3">
-                                            <div className="flex items-center gap-3">
-                                                <div className="relative flex-shrink-0">
-                                                    <img
-                                                        src={p.coverImage || (p.images?.length > 0 ? p.images[0] : "https://placehold.co/44x44?text=No+Img")}
-                                                        className="w-11 h-11 rounded-xl object-cover border border-slate-100"
-                                                        alt={p.productName}
-                                                        onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/44x44?text=No+Img"; }}
-                                                    />
-                                                    {p.coverImage && (
-                                                        <span className="absolute -top-1 -right-1 bg-amber-400 rounded-full p-0.5">
-                                                            <Star size={7} className="text-white fill-white" />
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <p className="font-semibold text-slate-800 truncate max-w-[160px]">{p.productName}</p>
-                                                    <p className="text-xs text-slate-400 truncate max-w-[160px]">
-                                                        {p.material ? `Material: ${p.material}` :
-                                                            Array.isArray(p.description) ? p.description[0] :
-                                                            p.description}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <span className="bg-violet-50 text-violet-600 text-xs font-semibold px-2.5 py-1 rounded-full">{p.category}</span>
-                                        </td>
-                                        <td className="px-4 py-3 font-bold text-violet-700">RM {Number(p.price).toFixed(2)}</td>
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center gap-1.5 text-slate-600">
-                                                <MousePointerClick size={13} className="text-slate-300" />
-                                                <span className="font-medium">{p.clicks || 0}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center justify-end gap-1.5">
-                                                <button onClick={() => startEdit(p)} className="p-2 rounded-lg hover:bg-violet-50 text-slate-400 hover:text-violet-600 transition-colors"><Pencil size={15} /></button>
-                                                <button onClick={() => setConfirmDialog({ open: true, product: p })} className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
-                                            </div>
-                                        </td>
+                    <>
+                        {/* ─── DESKTOP TABLE VIEW ─── */}
+                        <div className="hidden md:block overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50 text-gray-500 text-xs font-bold uppercase tracking-widest">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left font-bold">Product</th>
+                                        <th className="px-4 py-4 text-left font-bold">Category</th>
+                                        <th className="px-4 py-4 text-left font-bold">Price</th>
+                                        <th className="px-4 py-4 text-left font-bold">
+                                            <span className="flex items-center gap-1.5"><MousePointerClick size={14} /> Views</span>
+                                        </th>
+                                        <th className="px-6 py-4 text-right font-bold">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody className="divide-y divide-gray-50">
+                                    {filtered.map(p => (
+                                        <tr key={p.productId} className="hover:bg-[#F4F4F5]/50 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="relative flex-shrink-0">
+                                                        <img
+                                                            src={p.coverImage || (p.images?.length > 0 ? p.images[0] : "https://placehold.co/56x56?text=No+Img")}
+                                                            className="w-14 h-14 rounded-2xl object-cover border border-gray-100 bg-white"
+                                                            alt={p.productName}
+                                                            onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/56x56?text=No+Img"; }}
+                                                        />
+                                                        {p.coverImage && (
+                                                            <span className="absolute -top-1.5 -right-1.5 bg-amber-400 rounded-full p-1 shadow-sm">
+                                                                <Star size={10} className="text-white fill-white" />
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="font-extrabold text-[#18181B] truncate max-w-[180px] lg:max-w-xs group-hover:text-[#C8102E] transition-colors" style={headingStyle}>{p.productName}</p>
+                                                        <p className="text-xs text-gray-400 truncate max-w-[180px] lg:max-w-xs mt-0.5">
+                                                            {p.material ? `${p.material}` :
+                                                                Array.isArray(p.description) ? p.description[0] :
+                                                                p.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4">
+                                                <span className="bg-gray-100 text-[#18181B] text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">{p.category}</span>
+                                            </td>
+                                            <td className="px-4 py-4 font-extrabold text-[#18181B]" style={headingStyle}>₹{Number(p.price).toFixed(2)}</td>
+                                            <td className="px-4 py-4">
+                                                <div className="flex items-center gap-2 text-[#18181B] font-bold">
+                                                    <div className="bg-gray-100 p-1.5 rounded-full"><MousePointerClick size={12} className="text-gray-500" /></div>
+                                                    <span>{p.clicks || 0}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button onClick={() => startEdit(p)} className="p-2.5 rounded-full bg-[#F4F4F5] hover:bg-[#18181B] text-gray-500 hover:text-white transition-all"><Pencil size={16} strokeWidth={2.5} /></button>
+                                                    <button onClick={() => setConfirmDialog({ open: true, product: p })} className="p-2.5 rounded-full bg-[#F4F4F5] hover:bg-[#C8102E] text-gray-500 hover:text-white transition-all"><Trash2 size={16} strokeWidth={2.5} /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* ─── MOBILE CARD VIEW ─── */}
+                        <div className="block md:hidden divide-y divide-gray-50">
+                            {filtered.map(p => (
+                                <div key={p.productId} className="p-5 hover:bg-[#F4F4F5]/50 transition-colors flex flex-col gap-4">
+                                    <div className="flex gap-4">
+                                        {/* Mobile Image */}
+                                        <div className="relative flex-shrink-0">
+                                            <img
+                                                src={p.coverImage || (p.images?.length > 0 ? p.images[0] : "https://placehold.co/80x80?text=No+Img")}
+                                                className="w-20 h-20 rounded-[1.2rem] object-cover border border-gray-100 bg-white shadow-sm"
+                                                alt={p.productName}
+                                                onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/80x80?text=No+Img"; }}
+                                            />
+                                            {p.coverImage && (
+                                                <span className="absolute -top-1.5 -right-1.5 bg-amber-400 rounded-full p-1 shadow-sm">
+                                                    <Star size={10} className="text-white fill-white" />
+                                                </span>
+                                            )}
+                                        </div>
+                                        
+                                        {/* Mobile Info */}
+                                        <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                                            <div>
+                                                <p className="font-extrabold text-[#18181B] truncate text-base" style={headingStyle}>{p.productName}</p>
+                                                <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
+                                                    {p.material ? `${p.material}` :
+                                                        Array.isArray(p.description) ? p.description[0] :
+                                                        p.description}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center justify-between mt-2">
+                                                <span className="font-extrabold text-[#18181B] text-lg" style={headingStyle}>₹{Number(p.price).toFixed(2)}</span>
+                                                <span className="bg-gray-100 text-[#18181B] text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">{p.category}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Mobile Actions Row */}
+                                    <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+                                        <div className="flex items-center gap-2 text-[#18181B] font-bold text-xs">
+                                            <div className="bg-gray-100 p-1.5 rounded-full"><MousePointerClick size={12} className="text-gray-500" /></div>
+                                            <span>{p.clicks || 0} Views</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={() => startEdit(p)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F4F5] text-gray-600 hover:bg-[#18181B] hover:text-white transition-colors text-xs font-bold">
+                                                <Pencil size={12} strokeWidth={2.5} /> Edit
+                                            </button>
+                                            <button onClick={() => setConfirmDialog({ open: true, product: p })} className="p-1.5 rounded-full bg-[#F4F4F5] text-gray-500 hover:bg-[#C8102E] hover:text-white transition-colors">
+                                                <Trash2 size={14} strokeWidth={2.5} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
 
             {/* ════ MODAL ════ */}
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
-                    <div className="bg-white w-full sm:rounded-3xl sm:max-w-2xl max-h-[95vh] overflow-y-auto shadow-2xl rounded-t-3xl">
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md p-0 sm:p-4 transition-all">
+                    <div className="bg-white w-full sm:rounded-[2.5rem] sm:max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl rounded-t-[2.5rem] animate-fade-in-up">
 
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 sticky top-0 bg-white rounded-t-3xl z-10">
-                            <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 bg-violet-100 rounded-xl flex items-center justify-center">
-                                    {editingId ? <FilePenLine size={17} className="text-violet-600" /> : <PlusCircle size={17} className="text-violet-600" />}
+                        {/* Modal Header */}
+                        <div className="flex items-center justify-between px-6 sm:px-8 py-5 sm:py-6 border-b border-gray-50 sticky top-0 bg-white/90 backdrop-blur-xl z-20">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F4F4F5] rounded-full flex items-center justify-center">
+                                    {editingId ? <FilePenLine size={18} className="text-[#C8102E] sm:w-5 sm:h-5" /> : <PlusCircle size={18} className="text-[#C8102E] sm:w-5 sm:h-5" />}
                                 </div>
                                 <div>
-                                    <h2 className="font-bold text-slate-800 text-lg leading-tight">
-                                        {editingId ? "Edit Product" : "Add New Product"}
+                                    <h2 className="font-extrabold text-[#18181B] text-lg sm:text-xl tracking-tight" style={headingStyle}>
+                                        {editingId ? "Edit Product." : "Add Product."}
                                     </h2>
-                                    <p className="text-xs text-slate-400">Fill in the product details below</p>
+                                    <p className="text-[10px] sm:text-xs text-gray-500 font-medium">Complete the details below.</p>
                                 </div>
                             </div>
-                            <button onClick={closeModal} disabled={loading} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-red-500 transition-colors disabled:opacity-40">
-                                <X size={20} />
+                            <button onClick={closeModal} disabled={loading} className="p-2 sm:p-3 rounded-full bg-gray-50 hover:bg-gray-200 text-gray-500 hover:text-[#18181B] transition-colors disabled:opacity-40">
+                                <X size={18} strokeWidth={2.5} className="sm:w-5 sm:h-5" />
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="p-6 space-y-7">
+                        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-8 sm:space-y-10">
 
                             {/* Section 1: Basic Info */}
-                            <div className="space-y-4">
+                            <div className="space-y-4 sm:space-y-5">
                                 <SectionLabel icon={Tag} label="Basic Information" />
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
 
-                                    {/* Product Name */}
                                     <div className="sm:col-span-2">
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Product Name *</label>
-                                        <input type="text" required placeholder="e.g. iPhone 15 Silicone Case"
+                                        <label className="block text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">Product Name *</label>
+                                        <input type="text" required placeholder="e.g. Minimalist Desk Mat"
                                             value={form.productName}
                                             onChange={e => setForm({ ...form, productName: e.target.value })}
-                                            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                            className="w-full border-none rounded-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                     </div>
 
-                                    {/* Category with custom add */}
                                     <div className="sm:col-span-2">
                                         <CategorySelector
                                             value={form.category}
@@ -548,169 +606,139 @@ export default function Products() {
                                         />
                                     </div>
 
-                                    {/* Material */}
                                     <div>
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Product Material</label>
-                                        <input type="text" placeholder="e.g. Silicone, Plastic, Cotton"
+                                        <label className="block text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">Material</label>
+                                        <input type="text" placeholder="e.g. Matte Leather"
                                             value={form.material}
                                             onChange={e => setForm({ ...form, material: e.target.value })}
-                                            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                            className="w-full border-none rounded-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                     </div>
 
-                                    {/* Price */}
                                     <div>
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Price (RM) *</label>
+                                        <label className="block text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">Price *</label>
                                         <div className="relative">
-                                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">RM</span>
+                                            <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">₹</span>
                                             <input type="number" min="0" step="0.01" required placeholder="0.00"
                                                 value={form.price}
                                                 onChange={e => setForm({ ...form, price: e.target.value })}
-                                                className="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                                className="w-full border-none rounded-full pl-8 sm:pl-10 pr-4 sm:pr-5 py-3 sm:py-3.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                         </div>
                                     </div>
 
-                                    {/* Delivery */}
                                     <div className="sm:col-span-2">
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Delivery Details</label>
-                                        <input type="text" placeholder="e.g. Ships in 3–5 business days"
+                                        <label className="block text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">Delivery Details</label>
+                                        <input type="text" placeholder="e.g. Free shipping on orders over ₹500"
                                             value={form.deliveryDetails}
                                             onChange={e => setForm({ ...form, deliveryDetails: e.target.value })}
-                                            className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                            className="w-full border-none rounded-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Section 2: Contact Numbers */}
                             <div>
-                                <SectionLabel icon={Phone} label="Contact Numbers" />
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                                    {/* WhatsApp Number */}
+                                <SectionLabel icon={Phone} label="Contact Methods" />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                     <div>
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5 flex items-center gap-1.5">
-                                            <MessageCircle size={12} className="text-green-500" /> WhatsApp Number
+                                        <label className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">
+                                            <MessageCircle size={14} className="text-green-500" /> WhatsApp
                                         </label>
                                         <div className="relative">
-                                            <MessageCircle size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-green-400" />
-                                            <input
-                                                type="tel"
-                                                placeholder="e.g. 60123456789"
+                                            <input type="tel" placeholder="e.g. 60123456789"
                                                 value={form.whatsappNumber}
                                                 onChange={e => setForm({ ...form, whatsappNumber: e.target.value.replace(/\D/g, "") })}
-                                                className="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 bg-slate-50 focus:bg-white transition-all"
-                                            />
+                                                className="w-full border-none rounded-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                         </div>
-                                        <p className="text-[10px] text-slate-400 mt-1 ml-1">No + or spaces (e.g. 60123456789)</p>
                                     </div>
 
-                                    {/* Call Number */}
                                     <div>
-                                        <label className="block text-xs font-semibold text-slate-500 mb-1.5 flex items-center gap-1.5">
-                                            <Phone size={12} className="text-violet-500" /> Call Number
+                                        <label className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-gray-500 mb-1.5 sm:mb-2 uppercase tracking-wide">
+                                            <Phone size={14} className="text-[#18181B]" /> Call
                                         </label>
                                         <div className="relative">
-                                            <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-violet-400" />
-                                            <input
-                                                type="tel"
-                                                placeholder="e.g. 60123456789"
+                                            <input type="tel" placeholder="e.g. 60123456789"
                                                 value={form.callNumber}
                                                 onChange={e => setForm({ ...form, callNumber: e.target.value.replace(/\D/g, "") })}
-                                                className="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all"
-                                            />
+                                                className="w-full border-none rounded-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                         </div>
-                                        <p className="text-[10px] text-slate-400 mt-1 ml-1">Can be same or different number</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Section 3: Description bullets */}
                             <div>
-                                <SectionLabel icon={ListChecks} label="Product Details (Bullet Points)" />
-                                <div className="space-y-2">
+                                <SectionLabel icon={ListChecks} label="Product Details" />
+                                <div className="space-y-3">
                                     {bulletPoints.map((point, i) => (
-                                        <div key={i} className="flex items-center gap-2 group">
-                                            <div className="w-1.5 h-1.5 bg-violet-400 rounded-full flex-shrink-0" />
-                                            <input type="text" placeholder={`Point ${i + 1} — e.g. Scratch resistant`}
+                                        <div key={i} className="flex items-center gap-2 sm:gap-3 group">
+                                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#C8102E] rounded-full flex-shrink-0" />
+                                            <input type="text" placeholder={`Feature ${i + 1}`}
                                                 value={point} onChange={e => updateBullet(i, e.target.value)}
-                                                className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                                className="flex-1 border-none rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                             <button type="button" onClick={() => removeBullet(i)}
-                                                className="p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all">
-                                                <X size={14} />
+                                                className="p-2.5 sm:p-3 rounded-full bg-gray-100 text-gray-400 hover:text-white hover:bg-[#C8102E] opacity-100 md:opacity-0 group-hover:opacity-100 transition-all">
+                                                <X size={14} strokeWidth={2.5} className="sm:w-4 sm:h-4" />
                                             </button>
                                         </div>
                                     ))}
                                     <button type="button" onClick={addBullet}
-                                        className="flex items-center gap-2 text-xs text-violet-600 hover:text-violet-700 font-semibold mt-1 px-2 py-1 rounded-lg hover:bg-violet-50 transition-colors">
-                                        <Plus size={13} /> Add another point
+                                        className="flex items-center justify-center gap-2 w-full text-[10px] sm:text-xs text-[#18181B] font-extrabold mt-2 px-4 py-2.5 sm:py-3 rounded-full border-2 border-dashed border-gray-200 hover:border-[#18181B] hover:bg-gray-50 transition-all uppercase tracking-wide">
+                                        <Plus size={14} strokeWidth={3} /> Add Detail
                                     </button>
                                 </div>
                             </div>
 
                             {/* Section 4: Specs */}
                             <div>
-                                <SectionLabel icon={Sparkles} label="Features & Specs (Optional)" />
-                                <div className="space-y-2">
+                                <SectionLabel icon={Sparkles} label="Technical Specs" />
+                                <div className="space-y-3">
                                     {(form.specs || []).map((spec, i) => (
-                                        <div key={i} className="flex items-center gap-2 group">
+                                        <div key={i} className="flex items-center gap-2 sm:gap-3 group">
                                             <input type="text" placeholder="Key (e.g. Color)"
                                                 value={spec.key} onChange={e => updateSpec(i, "key", e.target.value)}
-                                                className="w-2/5 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
-                                            <span className="text-slate-300 font-bold flex-shrink-0">:</span>
+                                                className="w-1/3 sm:w-2/5 border-none rounded-full px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
+                                            <span className="text-gray-300 font-bold">:</span>
                                             <input type="text" placeholder="Value (e.g. White)"
                                                 value={spec.value} onChange={e => updateSpec(i, "value", e.target.value)}
-                                                className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 bg-slate-50 focus:bg-white transition-all" />
+                                                className="flex-1 border-none rounded-full px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#18181B] bg-[#F4F4F5] transition-all text-[#18181B]" />
                                             <button type="button" onClick={() => removeSpec(i)}
-                                                className="p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all">
-                                                <X size={14} />
+                                                className="p-2.5 sm:p-3 rounded-full bg-gray-100 text-gray-400 hover:text-white hover:bg-[#C8102E] opacity-100 md:opacity-0 group-hover:opacity-100 transition-all">
+                                                <X size={14} strokeWidth={2.5} className="sm:w-4 sm:h-4" />
                                             </button>
                                         </div>
                                     ))}
-                                    {(form.specs || []).length === 0 && (
-                                        <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-4 text-center">
-                                            <p className="text-xs text-slate-400">Examples: Color: White · RAM: 8GB · Weight: 200g</p>
-                                        </div>
-                                    )}
                                     <button type="button" onClick={addSpec}
-                                        className="flex items-center gap-2 text-xs text-violet-600 hover:text-violet-700 font-semibold mt-1 px-2 py-1 rounded-lg hover:bg-violet-50 transition-colors">
-                                        <Plus size={13} /> Add spec
+                                        className="flex items-center justify-center gap-2 w-full text-[10px] sm:text-xs text-[#18181B] font-extrabold mt-2 px-4 py-2.5 sm:py-3 rounded-full border-2 border-dashed border-gray-200 hover:border-[#18181B] hover:bg-gray-50 transition-all uppercase tracking-wide">
+                                        <Plus size={14} strokeWidth={3} /> Add Spec
                                     </button>
                                 </div>
                             </div>
 
-                            {/* ── NEW: Section 5: Cover Image ── */}
+                            {/* Section 5: Cover Image */}
                             <div>
                                 <SectionLabel icon={Star} label="Cover Image" />
-                                <p className="text-xs text-slate-400 mb-3">
-                                    Shown as the main card image in the shop listing. If not set, the first gallery image is used.
-                                </p>
                                 {displayCover ? (
-                                    <div className="flex items-center gap-4">
-                                        <div className="relative">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
+                                        <div className="relative w-fit">
                                             <img
                                                 src={displayCover}
-                                                className="w-24 h-24 object-cover rounded-2xl border-2 border-amber-300 shadow-sm"
-                                                onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/96x96?text=Err"; }}
+                                                className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-2xl sm:rounded-[1.5rem] border-[3px] border-[#C8102E] shadow-lg"
+                                                onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/112x112?text=Err"; }}
                                                 alt="Cover"
                                             />
-                                            <span className="absolute -top-1.5 -right-1.5 bg-amber-400 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                                                <Star size={8} className="fill-white" /> COVER
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={removeCover}
-                                                className="absolute -bottom-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 shadow"
-                                            >
-                                                <X size={10} />
+                                            <button type="button" onClick={removeCover}
+                                                className="absolute -bottom-2 -right-2 bg-[#18181B] text-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform">
+                                                <X size={12} strokeWidth={3} />
                                             </button>
                                         </div>
-                                        <label className="flex items-center gap-2 cursor-pointer bg-slate-50 hover:bg-amber-50 border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl px-4 py-2.5 text-sm text-slate-400 hover:text-amber-500 transition-all font-medium">
-                                            <ImagePlus size={15} /> Change cover
+                                        <label className="flex items-center justify-center w-full sm:w-auto gap-2 cursor-pointer bg-[#F4F4F5] hover:bg-[#18181B] hover:text-white rounded-full px-6 py-3 text-sm text-[#18181B] font-bold transition-all">
+                                            <ImagePlus size={16} /> Replace Cover
                                             <input type="file" accept="image/*" className="hidden" onChange={handleCoverImageChange} />
                                         </label>
                                     </div>
                                 ) : (
-                                    <label className="flex items-center gap-2 cursor-pointer bg-slate-50 hover:bg-amber-50 border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl px-4 py-2.5 text-sm text-slate-400 hover:text-amber-500 transition-all font-medium w-fit">
-                                        <ImagePlus size={15} /> Choose cover image
+                                    <label className="flex items-center justify-center gap-2 cursor-pointer bg-[#F4F4F5] border-2 border-dashed border-gray-200 hover:border-[#18181B] rounded-3xl sm:rounded-[2rem] w-full py-8 text-sm text-gray-500 hover:text-[#18181B] font-bold transition-all">
+                                        <ImagePlus size={20} /> Upload Cover Image
                                         <input type="file" accept="image/*" className="hidden" onChange={handleCoverImageChange} />
                                     </label>
                                 )}
@@ -718,56 +746,52 @@ export default function Products() {
 
                             {/* Section 6: Gallery Images */}
                             <div>
-                                <SectionLabel icon={ImagePlus} label="Product Images (Max 5)" />
-                                {editExistingImages.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mb-3">
-                                        {editExistingImages.map(url => (
-                                            <div key={url} className="relative">
-                                                <img src={url} className="w-16 h-16 object-cover rounded-xl border-2 border-slate-100"
-                                                    onError={e => { e.target.onerror = null; e.target.src = "https://placehold.co/64x64?text=Err"; }} alt="" />
-                                                <button type="button" onClick={() => setEditExistingImages(p => p.filter(u => u !== url))}
-                                                    className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 shadow">
-                                                    <X size={10} />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                {previews.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mb-3">
-                                        {previews.map((src, i) => (
-                                            <div key={i} className="relative">
-                                                <img src={src} className="w-16 h-16 object-cover rounded-xl border-2 border-violet-300" alt="" />
-                                                <span className="absolute -top-1.5 -left-1.5 bg-violet-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">NEW</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-3">
-                                    <span className="text-xs text-slate-400 font-medium">{editExistingImages.length + previews.length}/5 selected</span>
+                                <SectionLabel icon={ImagePlus} label="Product Gallery" />
+                                <p className="text-[10px] sm:text-xs text-gray-400 font-medium mb-3 sm:mb-4">You can select up to 5 additional images.</p>
+                                
+                                <div className="flex flex-wrap gap-3 sm:gap-4 mb-4">
+                                    {editExistingImages.map(url => (
+                                        <div key={url} className="relative group">
+                                            <img src={url} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl sm:rounded-[1rem] border border-gray-100 shadow-sm" alt="" />
+                                            <button type="button" onClick={() => setEditExistingImages(p => p.filter(u => u !== url))}
+                                                className="absolute -top-2 -right-2 bg-[#18181B] text-white rounded-full p-1.5 shadow-md opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <X size={10} strokeWidth={3} className="sm:w-3 sm:h-3" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {previews.map((src, i) => (
+                                        <div key={i} className="relative group">
+                                            <img src={src} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl sm:rounded-[1rem] border-2 border-[#18181B]" alt="" />
+                                            <span className="absolute -bottom-2 inset-x-1 sm:inset-x-2 bg-[#18181B] text-white text-[8px] sm:text-[9px] font-bold py-0.5 rounded-full text-center tracking-widest">NEW</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-2">
+                                    <span className="text-[10px] sm:text-xs text-[#18181B] font-extrabold uppercase tracking-wide">{editExistingImages.length + previews.length}/5 Selected</span>
                                     {(editExistingImages.length + imageFiles.length) < 5 && (
-                                        <label className="flex items-center gap-2 cursor-pointer bg-slate-50 hover:bg-violet-50 border-2 border-dashed border-slate-200 hover:border-violet-400 rounded-xl px-4 py-2.5 text-sm text-slate-400 hover:text-violet-500 transition-all font-medium">
-                                            <ImagePlus size={16} /> Choose images
+                                        <label className="flex items-center justify-center sm:justify-start gap-2 cursor-pointer bg-[#18181B] hover:bg-[#C8102E] text-white rounded-full px-5 py-2.5 text-xs font-bold transition-all shadow-md">
+                                            <Plus size={14} strokeWidth={3} /> Add Photos
                                             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
                                         </label>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Buttons */}
-                            <div className="flex gap-3 pt-2 border-t border-slate-100">
+                            {/* Action Buttons */}
+                            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 pt-6 border-t border-gray-100">
                                 <button type="button" onClick={closeModal} disabled={loading}
-                                    className="flex-1 py-3 border-2 border-slate-200 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-semibold transition-colors disabled:opacity-40">
+                                    className="w-full sm:w-1/3 py-3.5 sm:py-4 bg-white border-2 border-gray-100 rounded-full text-sm text-gray-500 hover:border-[#18181B] hover:text-[#18181B] font-extrabold transition-all disabled:opacity-40">
                                     Cancel
                                 </button>
                                 <button type="submit" disabled={loading}
-                                    className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-60 text-white font-bold py-3 rounded-xl transition-colors text-sm shadow-lg shadow-violet-200">
+                                    className="w-full sm:flex-1 flex items-center justify-center gap-2 bg-[#18181B] hover:bg-[#C8102E] disabled:bg-gray-300 text-white font-bold py-3.5 sm:py-4 rounded-full transition-all text-sm shadow-xl shadow-[#18181B]/10 sm:hover:-translate-y-1">
                                     {loading ? (
-                                        <><Loader2 size={16} className="animate-spin" />{(imageFiles.length > 0 || coverImageFile) ? "Uploading..." : "Saving..."}</>
+                                        <><Loader2 size={18} className="animate-spin" /> {(imageFiles.length > 0 || coverImageFile) ? "Uploading..." : "Saving..."}</>
                                     ) : editingId ? (
-                                        <><Pencil size={15} /> Update Product</>
+                                        <><Pencil size={18} /> Update Product</>
                                     ) : (
-                                        <><Plus size={15} /> Add Product</>
+                                        <><Plus size={18} strokeWidth={2.5} /> Add to Catalog</>
                                     )}
                                 </button>
                             </div>
