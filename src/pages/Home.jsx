@@ -9,9 +9,9 @@ const PRODUCTS_PER_PAGE = 20;
 
 // MANUALLY ADD YOUR REELS HERE
 const TRENDING_REELS = [
-    { id: 1, videoUrl: "/videos/reel1.mp4", title: "iPhone 15 Pro Max Case", price: "₹999" },
-    { id: 2, videoUrl: "/videos/reel2.mp4", title: "Premium Desk Setup", price: "₹2499" },
-    { id: 3, videoUrl: "/videos/reel3.mp4", title: "Minimalist Watch Straps", price: "₹799" },
+    { id: 1, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248933/WhatsApp_Video_2026-03-11_at_10.35.17_PM_sducdq.mp4", title: "iPhone 15 Pro Max Case",  },
+    { id: 2, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248942/WhatsApp_Video_2026-03-11_at_10.33.31_PM_1_irc2yc.mp4", title: "Premium Desk Setup", price: "₹2499" },
+    { id: 3, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248954/WhatsApp_Video_2026-03-11_at_10.33.31_PM_uogtq5.mp4", title: "Minimalist Watch Straps", price: "₹799" },
 ];
 
 export default function Home() {
@@ -151,28 +151,18 @@ export default function Home() {
                     <div ref={reelsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                         {TRENDING_REELS.map((reel) => (
                             <div key={reel.id} className="relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-[#18181B] group shadow-lg">
-                                <div className="absolute top-4 right-4 z-20 bg-black/30 backdrop-blur-md p-1.5 rounded-full text-white/80">
-                                    <VolumeX size={12} />
-                                </div>
+                                
                                 
                                 <video 
                                     src={reel.videoUrl} 
                                     className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
                                     autoPlay 
-                                    muted 
+                                    muted
                                     loop 
                                     playsInline
                                 />
 
-                                <div className="absolute bottom-4 left-4 right-4 p-4 bg-white/10 backdrop-blur-xl border border-white/10 rounded-[1.5rem] text-white flex justify-between items-center transform translate-y-1 group-hover:translate-y-0 transition-all duration-500 shadow-xl">
-                                    <div className="min-w-0">
-                                        <h4 className="font-bold text-xs md:text-sm truncate" style={headingStyle}>{reel.title}</h4>
-                                        <p className="text-[10px] font-bold text-[#C8102E]">{reel.price}</p>
-                                    </div>
-                                    <div className="bg-white text-[#18181B] p-2 rounded-full shadow-lg group-hover:bg-[#C8102E] group-hover:text-white transition-colors duration-300">
-                                        <Play size={12} fill="currentColor" />
-                                    </div>
-                                </div>
+                                
 
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none opacity-50" />
                             </div>
