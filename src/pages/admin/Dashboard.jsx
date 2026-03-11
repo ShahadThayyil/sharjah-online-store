@@ -52,14 +52,14 @@ export default function AdminDashboard() {
                         (e.g., imported at the top, or placed in your public folder)
                     */}
                     <img 
-                        src="/your-logo.jpg" 
+                        src="https://res.cloudinary.com/dmtzmgbkj/image/upload/f_webp/v1773242316/Gemini_Generated_Image_z1zngsz1zngsz1zn_h80z4b.png" 
                         alt="Sharjah Mobiles Logo" 
                         className="w-10 h-10 object-contain rounded-lg"
                         onError={(e) => { e.target.style.display = 'none'; }} // Hides if image not found yet
                     />
                     <div>
                         <p className="font-extrabold text-[#18181B] leading-tight text-xl tracking-tight" style={headingStyle}>
-                            Sharjah Mobiles.
+                            Sharjah Online Store
                         </p>
                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Admin Control</p>
                     </div>

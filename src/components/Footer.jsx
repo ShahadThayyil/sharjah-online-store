@@ -1,7 +1,7 @@
 import { ShoppingBag, Mail, MapPin, MessageCircle, ArrowUpRight } from "lucide-react";
 
 // Set your store's WhatsApp number here (include country code, no '+' or spaces)
-const OWNER_PHONE = "919876543210";
+const OWNER_PHONE = "919633060181";
 
 export default function Footer() {
     const headingStyle = { fontFamily: "'Poppins', sans-serif" };
@@ -22,20 +22,29 @@ export default function Footer() {
                     {/* ─── Brand Section (Editorial Left) ─── */}
                     <div className="flex flex-col gap-6 lg:max-w-lg">
                         
-                        <div className="flex items-center gap-3 font-extrabold text-2xl md:text-3xl tracking-tight text-white group" style={headingStyle}>
-                            <div className="bg-white text-[#18181B] p-2.5 rounded-full shadow-md group-hover:bg-[#C8102E] group-hover:text-white transition-colors duration-300">
-                                <ShoppingBag size={24} strokeWidth={2.5} />
-                            </div>
-                            Sharjah Mobiles.
-                        </div>
+                        <div
+  className="flex items-center gap-3 font-extrabold text-2xl md:text-3xl tracking-tight text-white group"
+  style={headingStyle}
+>
+  <div className=" shadow-md  transition-colors duration-300">
+    <img
+      src="https://res.cloudinary.com/dmtzmgbkj/image/upload/f_webp/v1773242316/Gemini_Generated_Image_z1zngsz1zngsz1zn_h80z4b.png"   // your logo path
+      alt="Sharjah Logo"
+      className="w-12 h-12 object-contain rounded-full"
+    />
+  </div>
+
+  Sharjah Online Store.
+</div>
                         
                         <h3 className="text-3xl md:text-4xl font-bold text-white/90 leading-tight mt-4" style={headingStyle}>
-                            Elevating your daily <br /> tech experience.
-                        </h3>
-                        
-                        <p className="text-base text-gray-400 leading-relaxed mt-2" style={bodyStyle}>
-                            Premium quality products with minimal, professional design. Delivered straight to your door with seamless, human customer support.
-                        </p>
+    Discover the latest <br /> watches & gadgets.
+</h3>
+
+<p className="text-base text-gray-400 leading-relaxed mt-2" style={bodyStyle}>
+    Shop stylish watches, electronics gadgets, and trending products at the best prices. 
+    Quality products, simple shopping, and fast delivery.
+</p>
                     </div>
 
                     {/* ─── Contact Section & CTA (Editorial Right) ─── */}
@@ -46,11 +55,11 @@ export default function Footer() {
                         
                         <ul className="flex flex-col gap-6 text-base text-gray-300" style={bodyStyle}>
                             <li>
-                                <a href="mailto:support@yourstore.com" className="group flex items-center gap-4 w-fit">
+                                <a href="mailto:onlinestoresharjah@gmail.com" className="group flex items-center gap-4 w-fit">
                                     <div className="bg-white/5 p-3 rounded-full group-hover:bg-[#C8102E] group-hover:text-white transition-colors duration-300">
                                         <Mail size={20} className="text-gray-400 group-hover:text-white transition-colors" />
                                     </div>
-                                    <span className="group-hover:text-white transition-colors">support@yourstore.com</span>
+                                    <span className="group-hover:text-white transition-colors">onlinestoresharjah@gmail.com</span>
                                 </a>
                             </li>
                             
@@ -59,7 +68,7 @@ export default function Footer() {
                                     <MapPin size={20} className="text-gray-400" />
                                 </div>
                                 <span className="leading-relaxed mt-1 text-gray-400">
-                                    Moonniyur, Kerala<br/>
+                                    Valanchery, Kerala<br/>
                                     <span className="text-white font-medium">India</span>
                                 </span>
                             </li>
@@ -85,13 +94,13 @@ export default function Footer() {
                 {/* ─── Bottom Copyright & Developer Info ─── */}
                 <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500" style={bodyStyle}>
                     <p>
-                        © {new Date().getFullYear()} Sharjah Mobiles. All rights reserved.
+                        © {new Date().getFullYear()} Sharjah Online Store. All rights reserved.
                     </p>
                     
                     {/* Sleek developer credit */}
                     <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/5">
                         <span className="text-xs">Developed by</span>
-                        <a href="#" className="font-bold text-white hover:text-[#C8102E] transition-colors tracking-wide" style={headingStyle}>
+                        <a href="https://wa.me/919847512024" className="font-bold text-white hover:text-[#C8102E] transition-colors tracking-wide" style={headingStyle}>
                             Vynx Webworks
                         </a>
                     </div>

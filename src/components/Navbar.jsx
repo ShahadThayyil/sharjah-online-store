@@ -7,20 +7,37 @@ export default function Navbar() {
     const headingStyle = { fontFamily: "'Poppins', sans-serif" };
     const navRef = useRef(null);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isVisible, setIsVisible] = useState(true); // Tracks if navbar should be visible
+    const [lastScrollY, setLastScrollY] = useState(0); // Tracks previous scroll position
 
-    // ─── SCROLL LISTENER FOR DYNAMIC BACKGROUND ──────────────────────────────
+    // ─── SCROLL LISTENER FOR DYNAMIC BACKGROUND & HIDE/SHOW ──────────────────
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 20) {
+            const currentScrollY = window.scrollY;
+
+            // 1. Handle Background Change (Glass effect)
+            if (currentScrollY > 20) {
                 setIsScrolled(true);
             } else {
                 setIsScrolled(false);
             }
+
+            // 2. Handle Hide/Show Logic
+            // If scrolling down and scrolled more than 100px, hide.
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                setIsVisible(false);
+            } 
+            // If scrolling up, show.
+            else {
+                setIsVisible(true);
+            }
+
+            setLastScrollY(currentScrollY);
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [lastScrollY]);
 
     // ─── GSAP ENTRANCE ANIMATION ─────────────────────────────────────────────
     useEffect(() => {
@@ -36,7 +53,9 @@ export default function Navbar() {
 
     return (
         <header 
-            className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+            className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-in-out ${
+                isVisible ? "translate-y-0" : "-translate-y-full"
+            } ${
                 isScrolled 
                 ? "bg-white/80 backdrop-blur-2xl border-b border-gray-200/50 shadow-[0_4px_30px_rgba(0,0,0,0.03)] py-3" 
                 : "bg-transparent border-b border-transparent shadow-none py-6"
@@ -49,12 +68,11 @@ export default function Navbar() {
                     to="/" 
                     className="flex items-center group transition-all duration-300" 
                 >
-                    <div className="relative overflow-hidden rounded-xl  group-hover:-translate-y-0.5 transition-all duration-300">
-                        {/* ✏️ Ensure IMG_9123.jpg is in your /public folder */}
+                    <div className="relative overflow-hidden rounded-xl group-hover:-translate-y-0.5 transition-all duration-300">
                         <img 
                             src="https://res.cloudinary.com/dmtzmgbkj/image/upload/f_webp/v1773162908/Gemini_Generated_Image_cq83thcq83thcq83-removebg-preview_mdgrld.png" 
                             alt="Sharjah Mobiles Logo" 
-                            className="h-10 w-auto md:h-18 object-contain"
+                            className="h-10 w-auto md:h-16 object-contain"
                             onError={(e) => { e.target.src = "https://placehold.co/100x100?text=Logo"; }}
                         />
                     </div>
@@ -63,9 +81,8 @@ export default function Navbar() {
                 {/* ─── Right Side: Social & CTA ─── */}
                 <div className="flex items-center gap-3 sm:gap-5 shrink-0">
                     
-                    {/* Sleek Editorial Instagram Pill */}
                     <a 
-                        href="https://instagram.com/yourusername" 
+                        href="https://www.instagram.com/sharjah_online_store/" 
                         target="_blank" 
                         rel="noreferrer"
                         className={`flex items-center gap-2 group p-1 pr-1 sm:pr-4 rounded-full transition-all duration-300 ${
@@ -81,13 +98,12 @@ export default function Navbar() {
                             className="hidden sm:block text-xs font-bold text-gray-500 group-hover:text-[#18181B] tracking-wide uppercase transition-colors duration-300"
                             style={headingStyle}
                         >
-                            @sharjahmobiles
+                            @sharjah_online_store
                         </span>
                     </a>
 
-                    {/* Support Button */}
                     <a 
-                        href="https://wa.me/60123456789" 
+                        href="https://wa.me/919633060181" 
                         target="_blank" 
                         rel="noreferrer"
                         className="flex items-center gap-2 px-5 sm:px-6 py-3 bg-[#18181B] hover:bg-[#C8102E] text-white rounded-full text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-[#C8102E]/20 hover:-translate-y-0.5"
