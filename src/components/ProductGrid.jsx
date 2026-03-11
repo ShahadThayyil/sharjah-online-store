@@ -27,7 +27,7 @@ export default function ProductGrid({ products }) {
 
     return (
         /* ─── Editorial Grid Layout ─── */
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 xl:gap-x-8 xl:gap-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 xl:gap-x-8 xl:gap-y-12">
             {products.map((product) => (
                 <div 
                     key={product.productId} 
