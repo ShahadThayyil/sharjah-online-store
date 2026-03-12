@@ -1,16 +1,21 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { getProducts } from "./services/productService"; // Import your data service
-import Home from "./pages/Home";
-import ProductDetails from "./pages/ProductDetails";
+import { useState, useEffect, lazy, Suspense } from "react";
+
+import { getProducts } from "./services/productService";
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AdminLogin from "./pages/admin/Login";
-import AdminDashboard from "./pages/admin/Dashboard";
+import LoadingScreen from "./components/LoadingScreen";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
-import LoadingScreen from "./components/LoadingScreen"; 
 
-export const OWNER_PHONE = "601234567890";
+// Lazy load pages (faster loading)
+const Home = lazy(() => import("./pages/Home"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const AdminLogin = lazy(() => import("./pages/admin/Login"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+
+// Owner WhatsApp number (Indian format)
+export const OWNER_PHONE = "919876543210";
 
 function PublicLayout() {
   return (
@@ -27,49 +32,64 @@ function PublicLayout() {
 export default function App() {
   const [isAppLoading, setIsAppLoading] = useState(true);
 
+
+
+  // 🔥 Initial data preload (Firebase optimization)
   useEffect(() => {
+    let isMounted = true;
+
     async function initializeAppData() {
       try {
-        // ─── WAITING FOR FIREBASE ───
-        // This will wait until getProducts() completely finishes fetching from Firebase
-        await getProducts(); 
-        
-        // Add a small artificial delay (800ms) for a smoother GSAP transition
+        await getProducts();
+
+        // small delay for smooth transition
         setTimeout(() => {
-          setIsAppLoading(false);
-        }, 800);
+          if (isMounted) setIsAppLoading(false);
+        }, 500);
+
       } catch (error) {
         console.error("Error fetching initial data:", error);
-        // Even if it fails, we show the app so it doesn't stay stuck on loading
-        setIsAppLoading(false);
+        if (isMounted) setIsAppLoading(false);
       }
     }
 
     initializeAppData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
+  // Global loading screen
   if (isAppLoading) {
     return <LoadingScreen />;
   }
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-        </Route>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
 
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route
-          path="/admin/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Public Pages */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+          </Route>
+
+          {/* Admin */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          <Route
+            path="/admin/dashboard/*"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

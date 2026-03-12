@@ -13,8 +13,8 @@ import {
 const DEFAULT_CATEGORIES = ["Toys", "Phone Cases", "Accessories", "Stationery", "Other"];
 
 // ── Set your default contact numbers here ─────────────────────────────────────
-const DEFAULT_WHATSAPP = "60123456789"; 
-const DEFAULT_CALL     = "60123456789"; 
+const DEFAULT_WHATSAPP = "9196330 60181"; 
+const DEFAULT_CALL     = "9196330 60181"; 
 
 const EMPTY_FORM = {
     productName: "",
