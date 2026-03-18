@@ -11,7 +11,7 @@ const PRODUCTS_PER_PAGE = 20;
 const TRENDING_REELS = [
     { id: 1, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248933/WhatsApp_Video_2026-03-11_at_10.35.17_PM_sducdq.mp4", title: "iPhone 15 Pro Max Case",  },
     { id: 2, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248942/WhatsApp_Video_2026-03-11_at_10.33.31_PM_1_irc2yc.mp4", title: "Premium Desk Setup", price: "₹2499" },
-    { id: 3, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773248954/WhatsApp_Video_2026-03-11_at_10.33.31_PM_uogtq5.mp4", title: "Minimalist Watch Straps", price: "₹799" },
+    { id: 3, videoUrl: "https://res.cloudinary.com/dmtzmgbkj/video/upload/v1773759888/WhatsApp_Video_2026-03-16_at_9.58.29_AM_ahx0co.mp4", title: "Minimalist Watch Straps", price: "₹799" },
 ];
 
 export default function Home() {
